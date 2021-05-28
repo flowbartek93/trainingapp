@@ -1,0 +1,3 @@
+// Training app
+
+User can pick up 3 modes - just timer for time, tabata - rundy praca odpuczynek, only rounds for minutes
