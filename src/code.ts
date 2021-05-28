@@ -1,15 +1,16 @@
 //DOM
 
-const milsecsContainer = document.getElementById("timer__milsecs")!;
-const secsContainer = document.getElementById("timer__secs")!;
-const minsContainer = document.getElementById("timer__mins")!;
-
+const milsecsContainer = document.getElementById("timer__milsecs")! as HTMLSpanElement;
+const secsContainer = document.getElementById("timer__secs")! as HTMLSpanElement;
+const minsContainer = document.getElementById("timer__mins")! as HTMLSpanElement;
+const _ = undefined;
 //Buttons
-const startBtn = document.querySelector(".startBtn")!;
-const stopBtn = document.querySelector(".stopBtn")!;
+const startBtn = document.querySelector(".startBtn")! as HTMLButtonElement;
+const resetBtn = document.querySelector(".resetBtn")! as HTMLButtonElement;
 let isCounting: boolean | null = null;
 
 let timerID: number | NodeJS.Timeout | null;
+let isPaused: boolean;
 
 //Types
 type timerData = {
@@ -24,6 +25,8 @@ type timerSettings = {
   rounds?: number;
   rest?: number;
 };
+
+type clearTimer = (id: number | NodeJS.Timeout | null) => void;
 
 const timer = (settings?: timerSettings, data?: timerData) => {
   let milsecs: number;
@@ -61,12 +64,47 @@ const timer = (settings?: timerSettings, data?: timerData) => {
       mins++;
     }
 
-    milsecsContainer.textContent = milsecs === 1 && secs > 1 ? "00" : milsecs.toString();
+    // milsecsContainer.textContent = milsecs === 1 && secs > 1 ? "00" : milsecs.toString();
+    milsecsContainer.textContent = milsecs < 10 ? "0" + milsecs.toString() : milsecs.toString();
     secsContainer.textContent = secs < 10 ? "0" + secs.toString() : secs.toString();
     minsContainer.textContent = mins < 10 ? "0" + mins.toString() : mins.toString();
   }, 1);
 
-  return { startCount, milsecs, secs, mins };
+  return { startCount };
+};
+
+const getCurrentTime = () => {
+  let milsecs = parseInt(milsecsContainer.textContent!);
+  let secs = parseInt(secsContainer.textContent!);
+  let mins = parseInt(minsContainer.textContent!);
+
+  return {
+    milsecs,
+    secs,
+    mins
+  };
+};
+
+const resetTimer = () => {
+  milsecsContainer.textContent = "00";
+  secsContainer.textContent = "00";
+  minsContainer.textContent = "00";
+
+  clearTimer(timerID);
+};
+
+const clearTimer = (id: number | null | NodeJS.Timeout) => {
+  if (isPaused) {
+    resetBtn.disabled = false;
+
+    if (id) {
+      if (typeof id === "number") {
+        clearInterval(id);
+      }
+    }
+  } else {
+    return;
+  }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -74,22 +112,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const button = e.target as HTMLButtonElement;
 
     if (button.classList.contains("active")) {
+      //pause timer
       button.classList.remove("active");
       startBtn.textContent = "Start";
-      if (timerID) {
-        if (typeof timerID === "number") {
-          clearInterval(timerID);
-        }
-      }
+      isPaused = true;
+      clearTimer(timerID);
     } else {
+      //run timer
       button.classList.add("active");
       startBtn.textContent = "Pause";
-      const { startCount, milsecs, secs, mins } = timer();
+      const { startCount } = timer(_, getCurrentTime());
       timerID = startCount;
-
+      isPaused = false;
       console.log("start");
+      resetBtn.disabled = true;
     }
   });
+
+  resetBtn.addEventListener("click", resetTimer);
 });
 
 // timer({ durationSecs: 10 });
