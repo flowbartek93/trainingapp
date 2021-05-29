@@ -47,9 +47,13 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     mins = 0;
   }
 
-  const startTimer = (timerMode: () => void) => {
+  const startTimer = (timerMode: () => boolean | undefined) => {
     const startCount = setInterval(() => {
-      timerMode();
+      const timeElapsed = timerMode();
+
+      if (timeElapsed) {
+        clearInterval(startCount);
+      }
 
       if (milsecs >= 100) {
         milsecs = 0;
@@ -75,7 +79,10 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   if (timerMode === "ON_TIME") {
     const startOnTimeMode = () => {
       if (mins === settings!.durationMinutes && secs === settings!.durationSecs) {
+        const isTimeElapsed: boolean = true;
+
         resetBtn.disabled = false;
+        return isTimeElapsed;
       }
     };
 
@@ -89,8 +96,9 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
       if (mins === settings!.durationMinutes && secs === settings!.durationSecs) {
         countRounds++;
         console.log("runda nr: ", countRounds);
-
-        resetTimer();
+        const isTimeElapsed: boolean = true;
+        resetBtn.disabled = false;
+        return isTimeElapsed;
       }
     };
 

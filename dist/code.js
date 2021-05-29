@@ -30,7 +30,10 @@ const timer = (option, settings, data) => {
     }
     const startTimer = (timerMode) => {
         const startCount = setInterval(() => {
-            timerMode();
+            const timeElapsed = timerMode();
+            if (timeElapsed) {
+                clearInterval(startCount);
+            }
             if (milsecs >= 100) {
                 milsecs = 0;
                 secs++;
@@ -52,7 +55,9 @@ const timer = (option, settings, data) => {
     if (timerMode === "ON_TIME") {
         const startOnTimeMode = () => {
             if (mins === settings.durationMinutes && secs === settings.durationSecs) {
+                const isTimeElapsed = true;
                 resetBtn.disabled = false;
+                return isTimeElapsed;
             }
         };
         startTimer(startOnTimeMode);
@@ -63,7 +68,9 @@ const timer = (option, settings, data) => {
             if (mins === settings.durationMinutes && secs === settings.durationSecs) {
                 countRounds++;
                 console.log("runda nr: ", countRounds);
-                resetTimer();
+                const isTimeElapsed = true;
+                resetBtn.disabled = false;
+                return isTimeElapsed;
             }
         };
         startTimer(startTabataMode);
