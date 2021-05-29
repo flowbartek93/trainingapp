@@ -7,13 +7,17 @@ const _ = undefined;
 //Buttons
 const startBtn = document.querySelector(".startBtn");
 const resetBtn = document.querySelector(".resetBtn");
+//Important values;
 let isCounting = null;
 let timerID;
 let isPaused;
-const timer = (settings, data) => {
+const timer = (option, settings, data) => {
     let milsecs;
     let secs;
     let mins;
+    let rounds = settings === null || settings === void 0 ? void 0 : settings.rounds;
+    let rest = settings === null || settings === void 0 ? void 0 : settings.rest;
+    const timerMode = option;
     if (data) {
         milsecs = data.milsecs;
         secs = data.secs;
@@ -24,31 +28,49 @@ const timer = (settings, data) => {
         secs = 0;
         mins = 0;
     }
-    const startCount = setInterval(() => {
-        if (settings) {
-            if (secs === settings.durationSecs) {
-                console.log(milsecs);
-                clearInterval(startCount);
+    const startTimer = (timerMode) => {
+        const startCount = setInterval(() => {
+            timerMode();
+            if (milsecs >= 100) {
+                milsecs = 0;
+                secs++;
             }
-        }
-        if (milsecs >= 100) {
-            milsecs = 0;
-            console.log(milsecs);
-            secs++;
-        }
-        else if (milsecs < 100) {
-            milsecs++; // counting from milsecs
-        }
-        if (secs >= 60) {
-            secs = 0;
-            mins++;
-        }
-        // milsecsContainer.textContent = milsecs === 1 && secs > 1 ? "00" : milsecs.toString();
-        milsecsContainer.textContent = milsecs < 10 ? "0" + milsecs.toString() : milsecs.toString();
-        secsContainer.textContent = secs < 10 ? "0" + secs.toString() : secs.toString();
-        minsContainer.textContent = mins < 10 ? "0" + mins.toString() : mins.toString();
-    }, 1);
-    return { startCount };
+            else if (milsecs < 100) {
+                milsecs++; // counting from milsecs
+            }
+            if (secs >= 60) {
+                secs = 0;
+                mins++;
+            }
+            // milsecsContainer.textContent = milsecs === 1 && secs > 1 ? "00" : milsecs.toString();
+            milsecsContainer.textContent = milsecs < 10 ? "0" + milsecs.toString() : milsecs.toString();
+            secsContainer.textContent = secs < 10 ? "0" + secs.toString() : secs.toString();
+            minsContainer.textContent = mins < 10 ? "0" + mins.toString() : mins.toString();
+        }, 1);
+        timerID = startCount;
+    };
+    if (timerMode === "ON_TIME") {
+        const startOnTimeMode = () => {
+            if (mins === settings.durationMinutes && secs === settings.durationSecs) {
+                resetBtn.disabled = false;
+            }
+        };
+        startTimer(startOnTimeMode);
+    }
+    if (timerMode === "TABATA") {
+        const startTabataMode = () => {
+            let countRounds = 0;
+            if (mins === settings.durationMinutes && secs === settings.durationSecs) {
+                countRounds++;
+                console.log("runda nr: ", countRounds);
+                resetTimer();
+            }
+        };
+        startTimer(startTabataMode);
+    }
+};
+const restTimer = (restTime) => {
+    const startRest = setInterval;
 };
 const getCurrentTime = () => {
     let milsecs = parseInt(milsecsContainer.textContent);
@@ -76,8 +98,25 @@ const clearTimer = (id) => {
         }
     }
     else {
-        return;
+        resetBtn.disabled = true;
     }
+};
+const onTimeOnly = (secs, mins) => {
+    const timeSetForMins = mins || 0; //
+    const timeSetForSecs = secs; //
+    return timer("ON_TIME", { durationMinutes: timeSetForMins, durationSecs: timeSetForSecs }, _);
+};
+const tabata = (workSeconds, workMinutes, rest, rounds) => {
+    const workInSeconds = workSeconds;
+    const workInMinutes = workMinutes;
+    const restTime = rest;
+    const roundsNumber = rounds;
+    return timer("TABATA", {
+        durationMinutes: workInMinutes,
+        durationSecs: workInSeconds,
+        rest: restTime,
+        rounds: roundsNumber
+    }, _);
 };
 document.addEventListener("DOMContentLoaded", () => {
     startBtn.addEventListener("click", (e) => {
@@ -93,13 +132,10 @@ document.addEventListener("DOMContentLoaded", () => {
             //run timer
             button.classList.add("active");
             startBtn.textContent = "Pause";
-            const { startCount } = timer(_, getCurrentTime());
-            timerID = startCount;
             isPaused = false;
-            console.log("start");
             resetBtn.disabled = true;
         }
     });
     resetBtn.addEventListener("click", resetTimer);
 });
-// timer({ durationSecs: 10 });
+// tabata(30, 5, 20, 3);
