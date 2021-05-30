@@ -30,10 +30,6 @@ const timer = (option, settings, data) => {
     }
     const startTimer = (timerMode) => {
         const startCount = setInterval(() => {
-            const timeElapsed = timerMode();
-            if (timeElapsed) {
-                clearInterval(startCount);
-            }
             if (milsecs >= 100) {
                 milsecs = 0;
                 secs++;
@@ -49,6 +45,10 @@ const timer = (option, settings, data) => {
             milsecsContainer.textContent = milsecs < 10 ? "0" + milsecs.toString() : milsecs.toString();
             secsContainer.textContent = secs < 10 ? "0" + secs.toString() : secs.toString();
             minsContainer.textContent = mins < 10 ? "0" + mins.toString() : mins.toString();
+            const timeElapsed = timerMode();
+            if (timeElapsed) {
+                clearInterval(startCount);
+            }
         }, 1);
         timerID = startCount;
     };
@@ -70,6 +70,8 @@ const timer = (option, settings, data) => {
                 console.log("runda nr: ", countRounds);
                 const isTimeElapsed = true;
                 resetBtn.disabled = false;
+                //wyzerowanie działa, teraz rest time
+                resetTimer();
                 return isTimeElapsed;
             }
         };
@@ -93,7 +95,7 @@ const resetTimer = () => {
     milsecsContainer.textContent = "00";
     secsContainer.textContent = "00";
     minsContainer.textContent = "00";
-    clearTimer(timerID);
+    console.log("resetuje");
 };
 const clearTimer = (id) => {
     if (isPaused) {
@@ -108,6 +110,7 @@ const clearTimer = (id) => {
         resetBtn.disabled = true;
     }
 };
+//Timer modes
 const onTimeOnly = (secs, mins) => {
     const timeSetForMins = mins || 0; //
     const timeSetForSecs = secs; //
@@ -125,6 +128,7 @@ const tabata = (workSeconds, workMinutes, rest, rounds) => {
         rounds: roundsNumber
     }, _);
 };
+//User Interface
 document.addEventListener("DOMContentLoaded", () => {
     startBtn.addEventListener("click", (e) => {
         const button = e.target;
