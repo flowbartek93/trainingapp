@@ -193,23 +193,5 @@ const tabata = (workSeconds: number, workMinutes: number, rest: number, rounds: 
 //User Interface
 
 document.addEventListener("DOMContentLoaded", () => {
-  startBtn.addEventListener("click", (e: Event) => {
-    const button = e.target as HTMLButtonElement;
-
-    if (button.classList.contains("active")) {
-      //pause timer
-      button.classList.remove("active");
-      startBtn.textContent = "Start";
-      isPaused = true;
-      clearTimer(timerID);
-    } else {
-      //run timer
-      button.classList.add("active");
-      startBtn.textContent = "Pause";
-      isPaused = false;
-      resetBtn.disabled = true;
-    }
-  });
+  startBtn.addEventListener("click", (e: Event) => {});
 });
-
-// tabata(30, 5, 20, 3);

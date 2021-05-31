@@ -7,15 +7,53 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container">
-      <h1>Training app</h1>
+    <div class="home-container">
+      <div class="select">
+        <p class="select-title">Select timer mode</p>
+        <div class="select-btn on-time">On Time</div>
+        <div class="select-btn tabata">Tabata</div>
+        <div class="select-btn armrap">Armrap</div>
+      </div>
 
-      <div id="timer">
+      <template class="on_time-container">
+        <p>Select training time</p>
+
+
+
+        <span class="seconds">00</div>
+        <span class="minutes">00</div>
+
+       <button class="start__on-time">Start!</button>
+
+      </template>
+
+      <template class="tabata-container">
+
+        <span class="seconds">00</div>
+        <span class="minutes">00</div>
+        <span class="rest">0</span>
+        <span class="rounds">0</span>
+
+      </template>
+
+      <template class="armrap-container">
+
+
+      <span class="seconds">00</div>
+      <span class="minutes">00</div>
+
+
+      </template>
+    </div>
+
+    <template class="timer-container">
+      <div id="timer" class="timer">
         <span id="timer__mins">00</span>:<span id="timer__secs">00</span>:<span id="timer__milsecs">00</span>
       </div>
-      <button class="startBtn">Start</button>
-      <button class="resetBtn" disabled>Reset</button>
-    </div>
+    </template>
+
+    <div id="app"></div>
+
     <script src="dist/code.js"></script>
   </body>
 </html>
