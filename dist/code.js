@@ -52,34 +52,54 @@ const timer = (option, settings, data) => {
         }, 1);
         timerID = startCount;
     };
-    if (timerMode === "ON_TIME") {
-        const startOnTimeMode = () => {
-            if (mins === settings.durationMinutes && secs === settings.durationSecs) {
-                const isTimeElapsed = true;
-                resetBtn.disabled = false;
-                return isTimeElapsed;
+    const resetTimer = () => {
+        milsecsContainer.textContent = "00";
+        secsContainer.textContent = "00";
+        minsContainer.textContent = "00";
+        milsecs = 0;
+        secs = 0;
+        mins = 0;
+        console.log("resetuje");
+    };
+    const startOnTimeMode = () => {
+        if (mins === settings.durationMinutes && secs === settings.durationSecs) {
+            const isTimeElapsed = true;
+            resetBtn.disabled = false;
+            return isTimeElapsed;
+        }
+    };
+    const startRest = () => {
+        let endOfPause = false;
+        resetTimer();
+        startTimer(() => {
+            if (secs === rest) {
+                endOfPause = true;
+                resetTimer();
+                return endOfPause;
             }
-        };
-        startTimer(startOnTimeMode);
+        });
+    };
+    const startTabataMode = () => {
+        if (mins === settings.durationMinutes && secs === settings.durationSecs) {
+            const isTimeElapsed = true;
+            resetBtn.disabled = false;
+            //wyzerowanie działa, teraz rest time
+            resetTimer();
+            startRest();
+            return isTimeElapsed;
+        }
+    };
+    if (timerMode === "ON_TIME") {
     }
     if (timerMode === "TABATA") {
-        const startTabataMode = () => {
-            let countRounds = 0;
-            if (mins === settings.durationMinutes && secs === settings.durationSecs) {
+        let countRounds = 0;
+        return (function () {
+            while (countRounds < rounds) {
                 countRounds++;
-                console.log("runda nr: ", countRounds);
-                const isTimeElapsed = true;
-                resetBtn.disabled = false;
-                //wyzerowanie działa, teraz rest time
-                resetTimer();
-                return isTimeElapsed;
+                startTimer(startTabataMode);
             }
-        };
-        startTimer(startTabataMode);
+        })();
     }
-};
-const restTimer = (restTime) => {
-    const startRest = setInterval;
 };
 const getCurrentTime = () => {
     let milsecs = parseInt(milsecsContainer.textContent);
@@ -90,12 +110,6 @@ const getCurrentTime = () => {
         secs,
         mins
     };
-};
-const resetTimer = () => {
-    milsecsContainer.textContent = "00";
-    secsContainer.textContent = "00";
-    minsContainer.textContent = "00";
-    console.log("resetuje");
 };
 const clearTimer = (id) => {
     if (isPaused) {
@@ -147,6 +161,5 @@ document.addEventListener("DOMContentLoaded", () => {
             resetBtn.disabled = true;
         }
     });
-    resetBtn.addEventListener("click", resetTimer);
 });
 // tabata(30, 5, 20, 3);
