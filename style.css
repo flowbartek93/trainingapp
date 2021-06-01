@@ -36,14 +36,13 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
+  max-height: 50vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-}
-
-.main-menu {
   flex-direction: column;
+  width: 100%;
+  font-size: 1.5rem;
 }
 
 .select {
@@ -72,6 +71,10 @@ body {
   border-radius: 5px;
 }
 
+.title-mode {
+  font-size: 2rem;
+}
+
 .select-btn:hover {
   filter: brightness(120%);
 }
@@ -85,4 +88,58 @@ body {
 
 .armrap {
   background-color: cornflowerblue;
+}
+
+.start-btn {
+  height: 50px;
+  width: 50px;
+  background-color: brown;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+  font-weight: 900;
+  font-size: 1rem;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  margin: 50px 0;
+  flex-shrink: 0;
+}
+.start-btn:hover {
+  filter: brightness(120%);
+}
+
+.minus,
+.plus {
+  cursor: pointer;
+}
+.minus {
+  color: blue;
+}
+.plus {
+  color: red;
+}
+.select-time-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.select-time-container > span {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 150px;
+}
+
+.select-time-container > p {
+  text-align: center;
+}
+
+.title-second {
+  text-align: center;
+}
+
+.set-time-span {
+  font-size: 2rem;
 }

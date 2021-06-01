@@ -3,61 +3,127 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Training app</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <template class="select-template">
+      <div class="main-container main-menu">
+        <p class="select-title">Select timer mode</p>
+        <div class="select-btn on-time">On Time</div>
+        <div class="select-btn tabata">Tabata</div>
+        <div class="select-btn armrap">Armrap</div>
+      </div>
+    </template>
 
+    <template class="on-time-template">
+      <div class="main-container">
+        <p class="title-mode">On Time Mode</p>
+        <p class="title-second">Set your time</p>
 
+        <div class="select-time-container">
+          <p>minutes:</p>
+          <span class="select-time-secs">
+            <span class="minus"><i class="fas fa-minus"></i></span>
+            <span class="set-time-span">00</span>
 
-      <template class="select-template">
-
-        <div class="main-container main-menu">
-          <p class="select-title">Select timer mode</p>
-          <div class="select-btn on-time">On Time</div>
-          <div class="select-btn tabata">Tabata</div>
-          <div class="select-btn armrap">Armrap</div>
+            <span class="plus"><i class="fas fa-plus"></i></span>
+          </span>
         </div>
-    
-      </template>
 
-      <template class="on-time-template">
+        <div class="select-time-container">
+          <p>seconds:</p>
+          <span class="select-time-secs">
+            <span class="minus"><i class="fas fa-minus"></i></span>
+            <span class="set-time-span">00</span>
 
-        <div class="main-container">
-          <p>On time</p>
-          <span class="seconds">00</div>
-          <span class="minutes">00</div>
-         <button class="start-on-time">Start!</button>
-        
+            <span class="plus"><i class="fas fa-plus"></i></span>
+          </span>
         </div>
-    
 
-      </template>
+        <button class="start-btn"><i class="fas fa-play"></i></button>
+      </div>
+    </template>
 
-      <template class="tabata-template">
+    <template class="tabata-template">
+      <div class="main-container">
+        <p class="title-mode">Tabata mode</p>
+        <p class="title-second">Set your time, rounds and rest time</p>
 
-          <div class="main-container"><p>tabata</p>
-            <span class="seconds">00</div>
-            <span class="minutes">00</div>
-            <span class="rest">0</span>
-            <span class="rounds">0</span></div>
-    
+        <div class="select-time-container">
+          <p>minutes:</p>
+          <span class="select-time-secs">
+            <span class="minus"><i class="fas fa-minus"></i></span>
+            <span class="set-time-span">00</span>
 
-      </template>
+            <span class="plus"><i class="fas fa-plus"></i></span>
+          </span>
+        </div>
 
-      <template class="armrap-template">
+        <div class="select-time-container">
+          <p>seconds:</p>
+          <span class="select-time-secs">
+            <span class="minus"><i class="fas fa-minus"></i></span>
+            <span class="set-time-span">00</span>
 
-        <div class="main-container">
-          <p>armrap</p>
+            <span class="plus"><i class="fas fa-plus"></i></span>
+          </span>
+        </div>
 
-          <span class="seconds">00</div>
-          <span class="minutes">00</div>
-          </div>
-     
+        <div class="select-time-container">
+          <p>Rest:</p>
+          <span class="select-time-secs">
+            <span class="minus"><i class="fas fa-minus"></i></span>
+            <span class="set-time-span">00</span>
 
+            <span class="plus"><i class="fas fa-plus"></i></span>
+          </span>
+        </div>
 
-      </template>
-    </div>
+        <div class="select-time-container">
+          <p>rounds:</p>
+          <span class="select-time-secs">
+            <span class="minus"><i class="fas fa-minus"></i></span>
+            <span class="set-time-span">0</span>
+
+            <span class="plus"><i class="fas fa-plus"></i></span>
+          </span>
+        </div>
+
+        <button class="start-btn"><i class="fas fa-play"></i></button>
+      </div>
+    </template>
+
+    <template class="armrap-template">
+      <div class="main-container">
+        <p class="title-mode">Armrap mode</p>
+        <p class="title-second">As many rounds as possible in given time</p>
+
+        <div class="select-time-container">
+          <p>minutes:</p>
+          <span class="select-time-secs">
+            <span class="minus"><i class="fas fa-minus"></i></span>
+            <span class="set-time-span">00</span>
+
+            <span class="plus"><i class="fas fa-plus"></i></span>
+          </span>
+        </div>
+
+        <div class="select-time-container">
+          <p>seconds:</p>
+          <span class="select-time-secs">
+            <span class="minus"><i class="fas fa-minus"></i></span>
+            <span class="set-time-span">00</span>
+
+            <span class="plus"><i class="fas fa-plus"></i></span>
+          </span>
+        </div>
+
+        <button class="start-btn"><i class="fas fa-play"></i></button>
+      </div>
+    </template>
 
     <template class="timer-container">
       <div id="timer" class="timer">
@@ -65,11 +131,7 @@
       </div>
     </template>
 
-    <div id="app">
-
-
-
-    </div>
+    <div id="app"></div>
 
     <script src="dist/code.js"></script>
   </body>
