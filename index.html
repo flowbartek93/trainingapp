@@ -7,40 +7,53 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="home-container">
-      <div class="select">
-        <p class="select-title">Select timer mode</p>
-        <div class="select-btn on-time">On Time</div>
-        <div class="select-btn tabata">Tabata</div>
-        <div class="select-btn armrap">Armrap</div>
-      </div>
-
-      <template class="on_time-container">
-        <p>Select training time</p>
 
 
 
-        <span class="seconds">00</div>
-        <span class="minutes">00</div>
+      <template class="select-template">
 
-       <button class="start__on-time">Start!</button>
+        <div class="main-container main-menu">
+          <p class="select-title">Select timer mode</p>
+          <div class="select-btn on-time">On Time</div>
+          <div class="select-btn tabata">Tabata</div>
+          <div class="select-btn armrap">Armrap</div>
+        </div>
+    
+      </template>
+
+      <template class="on-time-template">
+
+        <div class="main-container">
+          <p>On time</p>
+          <span class="seconds">00</div>
+          <span class="minutes">00</div>
+         <button class="start-on-time">Start!</button>
+        
+        </div>
+    
 
       </template>
 
-      <template class="tabata-container">
+      <template class="tabata-template">
 
-        <span class="seconds">00</div>
-        <span class="minutes">00</div>
-        <span class="rest">0</span>
-        <span class="rounds">0</span>
+          <div class="main-container"><p>tabata</p>
+            <span class="seconds">00</div>
+            <span class="minutes">00</div>
+            <span class="rest">0</span>
+            <span class="rounds">0</span></div>
+    
 
       </template>
 
-      <template class="armrap-container">
+      <template class="armrap-template">
 
+        <div class="main-container">
+          <p>armrap</p>
 
-      <span class="seconds">00</div>
-      <span class="minutes">00</div>
+          <span class="seconds">00</div>
+          <span class="minutes">00</div>
+          </div>
+     
 
 
       </template>
@@ -52,7 +65,11 @@
       </div>
     </template>
 
-    <div id="app"></div>
+    <div id="app">
+
+
+
+    </div>
 
     <script src="dist/code.js"></script>
   </body>

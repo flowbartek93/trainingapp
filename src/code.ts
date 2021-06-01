@@ -4,9 +4,18 @@ const milsecsContainer = document.getElementById("timer__milsecs")! as HTMLSpanE
 const secsContainer = document.getElementById("timer__secs")! as HTMLSpanElement;
 const minsContainer = document.getElementById("timer__mins")! as HTMLSpanElement;
 const _ = undefined;
+
 //Buttons
-const startBtn = document.querySelector(".startBtn")! as HTMLButtonElement;
-const resetBtn = document.querySelector(".resetBtn")! as HTMLButtonElement;
+
+//templates
+
+const onTimeUI = document.querySelector(".on-time-template") as HTMLTemplateElement;
+const tabataUI = document.querySelector(".tabata-template") as HTMLTemplateElement;
+const armrapUI = document.querySelector(".armrap-template") as HTMLTemplateElement;
+const selectUI = document.querySelector(".select-template") as HTMLTemplateElement;
+
+//render container
+const app = document.getElementById("app")!;
 
 //Important values;
 let isCounting: boolean | null = null;
@@ -93,7 +102,6 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     if (mins === settings!.durationMinutes && secs === settings!.durationSecs) {
       const isTimeElapsed: boolean = true;
 
-      resetBtn.disabled = false;
       return isTimeElapsed;
     }
   };
@@ -114,7 +122,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   const startTabataMode = () => {
     if (mins === settings!.durationMinutes && secs === settings!.durationSecs) {
       const isTimeElapsed: boolean = true;
-      resetBtn.disabled = false;
+
       //wyzerowanie działa, teraz rest time
       resetTimer();
       startRest();
@@ -151,15 +159,12 @@ const getCurrentTime = () => {
 
 const clearTimer = (id: number | null | NodeJS.Timeout) => {
   if (isPaused) {
-    resetBtn.disabled = false;
-
     if (id) {
       if (typeof id === "number") {
         clearInterval(id);
       }
     }
   } else {
-    resetBtn.disabled = true;
   }
 };
 
@@ -192,6 +197,34 @@ const tabata = (workSeconds: number, workMinutes: number, rest: number, rounds: 
 
 //User Interface
 
+const renderContent = (el: HTMLTemplateElement) => {
+  const importedNode = document.importNode(el.content, true);
+  const HTMLContent = importedNode.firstElementChild as HTMLElement;
+
+  if (app.firstElementChild?.hasChildNodes()) {
+    app.firstElementChild.remove();
+    return app.insertAdjacentElement("afterbegin", HTMLContent);
+  } else {
+    return app.insertAdjacentElement("afterbegin", HTMLContent);
+  }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
-  startBtn.addEventListener("click", (e: Event) => {});
+  renderContent(selectUI);
+
+  const onTimeBtn = document.querySelector(".on-time")! as HTMLDivElement;
+  const tabataBtn = document.querySelector(".tabata")! as HTMLDivElement;
+  const armrapBtn = document.querySelector(".armrap")! as HTMLDivElement;
+
+  onTimeBtn.addEventListener("click", () => {
+    renderContent(onTimeUI);
+  });
+
+  tabataBtn.addEventListener("click", () => {
+    renderContent(tabataUI);
+  });
+
+  armrapBtn.addEventListener("click", () => {
+    renderContent(armrapUI);
+  });
 });

@@ -5,8 +5,13 @@ const secsContainer = document.getElementById("timer__secs");
 const minsContainer = document.getElementById("timer__mins");
 const _ = undefined;
 //Buttons
-const startBtn = document.querySelector(".startBtn");
-const resetBtn = document.querySelector(".resetBtn");
+//templates
+const onTimeUI = document.querySelector(".on-time-template");
+const tabataUI = document.querySelector(".tabata-template");
+const armrapUI = document.querySelector(".armrap-template");
+const selectUI = document.querySelector(".select-template");
+//render container
+const app = document.getElementById("app");
 //Important values;
 let isCounting = null;
 let timerID;
@@ -64,7 +69,6 @@ const timer = (option, settings, data) => {
     const startOnTimeMode = () => {
         if (mins === settings.durationMinutes && secs === settings.durationSecs) {
             const isTimeElapsed = true;
-            resetBtn.disabled = false;
             return isTimeElapsed;
         }
     };
@@ -82,7 +86,6 @@ const timer = (option, settings, data) => {
     const startTabataMode = () => {
         if (mins === settings.durationMinutes && secs === settings.durationSecs) {
             const isTimeElapsed = true;
-            resetBtn.disabled = false;
             //wyzerowanie działa, teraz rest time
             resetTimer();
             startRest();
@@ -113,7 +116,6 @@ const getCurrentTime = () => {
 };
 const clearTimer = (id) => {
     if (isPaused) {
-        resetBtn.disabled = false;
         if (id) {
             if (typeof id === "number") {
                 clearInterval(id);
@@ -121,7 +123,6 @@ const clearTimer = (id) => {
         }
     }
     else {
-        resetBtn.disabled = true;
     }
 };
 //Timer modes
@@ -143,23 +144,30 @@ const tabata = (workSeconds, workMinutes, rest, rounds) => {
     }, _);
 };
 //User Interface
+const renderContent = (el) => {
+    var _a;
+    const importedNode = document.importNode(el.content, true);
+    const HTMLContent = importedNode.firstElementChild;
+    if ((_a = app.firstElementChild) === null || _a === void 0 ? void 0 : _a.hasChildNodes()) {
+        app.firstElementChild.remove();
+        return app.insertAdjacentElement("afterbegin", HTMLContent);
+    }
+    else {
+        return app.insertAdjacentElement("afterbegin", HTMLContent);
+    }
+};
 document.addEventListener("DOMContentLoaded", () => {
-    startBtn.addEventListener("click", (e) => {
-        const button = e.target;
-        if (button.classList.contains("active")) {
-            //pause timer
-            button.classList.remove("active");
-            startBtn.textContent = "Start";
-            isPaused = true;
-            clearTimer(timerID);
-        }
-        else {
-            //run timer
-            button.classList.add("active");
-            startBtn.textContent = "Pause";
-            isPaused = false;
-            resetBtn.disabled = true;
-        }
+    renderContent(selectUI);
+    const onTimeBtn = document.querySelector(".on-time");
+    const tabataBtn = document.querySelector(".tabata");
+    const armrapBtn = document.querySelector(".armrap");
+    onTimeBtn.addEventListener("click", () => {
+        renderContent(onTimeUI);
+    });
+    tabataBtn.addEventListener("click", () => {
+        renderContent(tabataUI);
+    });
+    armrapBtn.addEventListener("click", () => {
+        renderContent(armrapUI);
     });
 });
-// tabata(30, 5, 20, 3);
