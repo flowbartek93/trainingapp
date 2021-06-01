@@ -209,7 +209,44 @@ const renderContent = (el: HTMLTemplateElement) => {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+const counter = () => {
+  const counters = document.querySelectorAll(".select-time-container");
+
+  counters.forEach(counter => {
+    counter.lastElementChild?.firstElementChild?.addEventListener("click", e => {
+      //MINUS
+
+      const clickedEl = e.target as HTMLElement;
+      let currentValue: number = parseInt(clickedEl.parentElement!.parentElement?.children[1].textContent!); // kontener gdzie ustawia się pożądany czas
+      const container = clickedEl.parentElement!.parentElement?.children[1]!;
+      currentValue <= 0 ? (currentValue = 0) : currentValue--;
+      container.textContent = currentValue.toString();
+
+      console.log(currentValue);
+    });
+    counter.lastElementChild?.lastElementChild?.addEventListener("click", e => {
+      //PLUS
+
+      const clickedEl = e.target as HTMLElement;
+      let currentValue: number = parseInt(clickedEl.parentElement!.parentElement?.children[1].textContent!); // kontener gdzie ustawia się pożądany czas
+      const container = clickedEl.parentElement!.parentElement?.children[1]!;
+      currentValue++;
+      container.textContent = currentValue.toString();
+
+      console.log(currentValue);
+    });
+  });
+};
+
+const backToHome = () => {
+  const backBtn = document.querySelector(".back-btn")!;
+
+  return backBtn.addEventListener("click", () => {
+    reRenderUI();
+  });
+};
+
+const reRenderUI = () => {
   renderContent(selectUI);
 
   const onTimeBtn = document.querySelector(".on-time")! as HTMLDivElement;
@@ -218,13 +255,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   onTimeBtn.addEventListener("click", () => {
     renderContent(onTimeUI);
+    backToHome();
+    counter();
   });
 
   tabataBtn.addEventListener("click", () => {
     renderContent(tabataUI);
+    backToHome();
+    counter();
   });
 
   armrapBtn.addEventListener("click", () => {
     renderContent(armrapUI);
+    backToHome();
+    counter();
   });
-});
+};
+
+document.addEventListener("DOMContentLoaded", reRenderUI);

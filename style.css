@@ -138,8 +138,25 @@ body {
 
 .title-second {
   text-align: center;
+  margin: 10px 0;
 }
 
 .set-time-span {
   font-size: 2rem;
+}
+
+.back-btn {
+  height: 50px;
+  width: 150px;
+  background-color: brown;
+  border: 2px solid white;
+  font-family: "Roboto Mono", monospace;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+.back-btn:hover {
+  filter: brightness(120%);
 }

@@ -156,18 +156,57 @@ const renderContent = (el) => {
         return app.insertAdjacentElement("afterbegin", HTMLContent);
     }
 };
-document.addEventListener("DOMContentLoaded", () => {
+const counter = () => {
+    const counters = document.querySelectorAll(".select-time-container");
+    counters.forEach(counter => {
+        var _a, _b, _c, _d;
+        (_b = (_a = counter.lastElementChild) === null || _a === void 0 ? void 0 : _a.firstElementChild) === null || _b === void 0 ? void 0 : _b.addEventListener("click", e => {
+            //MINUS
+            var _a, _b;
+            const clickedEl = e.target;
+            let currentValue = parseInt((_a = clickedEl.parentElement.parentElement) === null || _a === void 0 ? void 0 : _a.children[1].textContent); // kontener gdzie ustawia się pożądany czas
+            const container = (_b = clickedEl.parentElement.parentElement) === null || _b === void 0 ? void 0 : _b.children[1];
+            currentValue <= 0 ? (currentValue = 0) : currentValue--;
+            container.textContent = currentValue.toString();
+            console.log(currentValue);
+        });
+        (_d = (_c = counter.lastElementChild) === null || _c === void 0 ? void 0 : _c.lastElementChild) === null || _d === void 0 ? void 0 : _d.addEventListener("click", e => {
+            //PLUS
+            var _a, _b;
+            const clickedEl = e.target;
+            let currentValue = parseInt((_a = clickedEl.parentElement.parentElement) === null || _a === void 0 ? void 0 : _a.children[1].textContent); // kontener gdzie ustawia się pożądany czas
+            const container = (_b = clickedEl.parentElement.parentElement) === null || _b === void 0 ? void 0 : _b.children[1];
+            currentValue++;
+            container.textContent = currentValue.toString();
+            console.log(currentValue);
+        });
+    });
+};
+const backToHome = () => {
+    const backBtn = document.querySelector(".back-btn");
+    return backBtn.addEventListener("click", () => {
+        reRenderUI();
+    });
+};
+const reRenderUI = () => {
     renderContent(selectUI);
     const onTimeBtn = document.querySelector(".on-time");
     const tabataBtn = document.querySelector(".tabata");
     const armrapBtn = document.querySelector(".armrap");
     onTimeBtn.addEventListener("click", () => {
         renderContent(onTimeUI);
+        backToHome();
+        counter();
     });
     tabataBtn.addEventListener("click", () => {
         renderContent(tabataUI);
+        backToHome();
+        counter();
     });
     armrapBtn.addEventListener("click", () => {
         renderContent(armrapUI);
+        backToHome();
+        counter();
     });
-});
+};
+document.addEventListener("DOMContentLoaded", reRenderUI);
