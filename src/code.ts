@@ -1,8 +1,5 @@
 //DOM
 
-const milsecsContainer = document.getElementById("timer__milsecs")! as HTMLSpanElement;
-const secsContainer = document.getElementById("timer__secs")! as HTMLSpanElement;
-const minsContainer = document.getElementById("timer__mins")! as HTMLSpanElement;
 const _ = undefined;
 
 //Buttons
@@ -13,6 +10,8 @@ const onTimeUI = document.querySelector(".on-time-template") as HTMLTemplateElem
 const tabataUI = document.querySelector(".tabata-template") as HTMLTemplateElement;
 const armrapUI = document.querySelector(".armrap-template") as HTMLTemplateElement;
 const selectUI = document.querySelector(".select-template") as HTMLTemplateElement;
+
+const timerUI = document.querySelector(".timer-template") as HTMLTemplateElement;
 
 //render container
 const app = document.getElementById("app")!;
@@ -36,9 +35,15 @@ type timerSettings = {
   rest?: number;
 };
 
+const settings: timerSettings = {};
+
 type clearTimer = (id: number | NodeJS.Timeout | null) => void;
 
 const timer = (option: string, settings?: timerSettings, data?: timerData) => {
+  const milsecsContainer = document.getElementById("timer__milsecs")! as HTMLSpanElement;
+  const secsContainer = document.getElementById("timer__secs")! as HTMLSpanElement;
+  const minsContainer = document.getElementById("timer__mins")! as HTMLSpanElement;
+
   let milsecs: number;
   let secs: number;
   let mins: number;
@@ -120,17 +125,20 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   };
 
   const startTabataMode = () => {
+    let isTimeElapsed: boolean = false;
     if (mins === settings!.durationMinutes && secs === settings!.durationSecs) {
-      const isTimeElapsed: boolean = true;
+      console.log("zerowanie");
 
+      isTimeElapsed = true;
       //wyzerowanie działa, teraz rest time
       resetTimer();
       startRest();
-      return isTimeElapsed;
     }
+    return isTimeElapsed;
   };
 
   if (timerMode === "ON_TIME") {
+    startTimer(startOnTimeMode);
   }
 
   if (timerMode === "TABATA") {
@@ -145,17 +153,17 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   }
 };
 
-const getCurrentTime = () => {
-  let milsecs = parseInt(milsecsContainer.textContent!);
-  let secs = parseInt(secsContainer.textContent!);
-  let mins = parseInt(minsContainer.textContent!);
+// const getCurrentTime = () => {
+//   let milsecs = parseInt(milsecsContainer.textContent!);
+//   let secs = parseInt(secsContainer.textContent!);
+//   let mins = parseInt(minsContainer.textContent!);
 
-  return {
-    milsecs,
-    secs,
-    mins
-  };
-};
+//   return {
+//     milsecs,
+//     secs,
+//     mins
+//   };
+// };
 
 const clearTimer = (id: number | null | NodeJS.Timeout) => {
   if (isPaused) {
@@ -170,9 +178,9 @@ const clearTimer = (id: number | null | NodeJS.Timeout) => {
 
 //Timer modes
 
-const onTimeOnly = (secs: number, mins: number) => {
-  const timeSetForMins = mins || 0; //
-  const timeSetForSecs = secs; //
+const onTimeOnly = (workSecs: number, workMins: number) => {
+  const timeSetForMins = workMins || 0; //
+  const timeSetForSecs = workSecs; //
 
   return timer("ON_TIME", { durationMinutes: timeSetForMins, durationSecs: timeSetForSecs }, _);
 };
@@ -209,40 +217,79 @@ const renderContent = (el: HTMLTemplateElement) => {
   }
 };
 
-const counter = () => {
+const addCounterListeners = () => {
   const counters = document.querySelectorAll(".select-time-container");
 
   counters.forEach(counter => {
     counter.lastElementChild?.firstElementChild?.addEventListener("click", e => {
       //MINUS
 
-      const clickedEl = e.target as HTMLElement;
-      let currentValue: number = parseInt(clickedEl.parentElement!.parentElement?.children[1].textContent!); // kontener gdzie ustawia się pożądany czas
-      const container = clickedEl.parentElement!.parentElement?.children[1]!;
-      currentValue <= 0 ? (currentValue = 0) : currentValue--;
-      container.textContent = currentValue.toString();
-
-      console.log(currentValue);
+      countSettings(e, "minus");
     });
     counter.lastElementChild?.lastElementChild?.addEventListener("click", e => {
       //PLUS
 
-      const clickedEl = e.target as HTMLElement;
-      let currentValue: number = parseInt(clickedEl.parentElement!.parentElement?.children[1].textContent!); // kontener gdzie ustawia się pożądany czas
-      const container = clickedEl.parentElement!.parentElement?.children[1]!;
-      currentValue++;
-      container.textContent = currentValue.toString();
-
-      console.log(currentValue);
+      countSettings(e, "plus");
     });
   });
 };
 
+const countSettings = (e: Event, operation: string) => {
+  const clickedEl = e.target as HTMLElement;
+  let currentValue: number = parseInt(clickedEl.parentElement!.parentElement?.children[1].textContent!); // kontener gdzie ustawia się pożądany czas
+  const container = clickedEl.parentElement!.parentElement?.children[1]!;
+
+  currentValue <= 0 && (currentValue = 0);
+
+  if (operation === "plus") {
+    currentValue++;
+  } else if (operation === "minus") {
+    currentValue--;
+  }
+
+  container.textContent = currentValue.toString();
+
+  if (container.classList.contains("seconds")) {
+    settings.durationSecs = currentValue;
+  }
+
+  if (container.classList.contains("minutes")) {
+    settings.durationMinutes = currentValue;
+  }
+
+  if (container.classList.contains("rest")) {
+    settings.rest = currentValue;
+  }
+
+  if (container.classList.contains("rounds")) {
+    settings.rounds = currentValue;
+  }
+  console.log(settings);
+};
+
 const backToHome = () => {
-  const backBtn = document.querySelector(".back-btn")!;
+  const backBtn = document.querySelector(".back-btn")! as HTMLButtonElement;
 
   return backBtn.addEventListener("click", () => {
     reRenderUI();
+  });
+};
+
+const startTiming = (mode: string, settings: timerSettings) => {
+  const startBtn = document.querySelector(".start-btn")! as HTMLButtonElement;
+
+  startBtn.addEventListener("click", () => {
+    renderContent(timerUI);
+    switch (mode) {
+      case "on_time":
+        onTimeOnly(settings.durationSecs!, settings.durationMinutes!);
+        break;
+      case "tabata":
+        tabata(settings.durationSecs!, settings.durationMinutes!, settings.rest!, settings.rounds!);
+        break;
+      case "armrap":
+        break;
+    }
   });
 };
 
@@ -254,21 +301,30 @@ const reRenderUI = () => {
   const armrapBtn = document.querySelector(".armrap")! as HTMLDivElement;
 
   onTimeBtn.addEventListener("click", () => {
+    const mode = "on_time";
+
     renderContent(onTimeUI);
     backToHome();
-    counter();
+    addCounterListeners();
+
+    startTiming(mode, settings);
   });
 
   tabataBtn.addEventListener("click", () => {
+    const mode = "tabata";
+
     renderContent(tabataUI);
     backToHome();
-    counter();
+    addCounterListeners();
+    startTiming(mode, settings);
   });
 
   armrapBtn.addEventListener("click", () => {
+    const mode = "armrap";
+
     renderContent(armrapUI);
     backToHome();
-    counter();
+    addCounterListeners();
   });
 };
 

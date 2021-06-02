@@ -1,8 +1,5 @@
 "use strict";
 //DOM
-const milsecsContainer = document.getElementById("timer__milsecs");
-const secsContainer = document.getElementById("timer__secs");
-const minsContainer = document.getElementById("timer__mins");
 const _ = undefined;
 //Buttons
 //templates
@@ -10,13 +7,18 @@ const onTimeUI = document.querySelector(".on-time-template");
 const tabataUI = document.querySelector(".tabata-template");
 const armrapUI = document.querySelector(".armrap-template");
 const selectUI = document.querySelector(".select-template");
+const timerUI = document.querySelector(".timer-template");
 //render container
 const app = document.getElementById("app");
 //Important values;
 let isCounting = null;
 let timerID;
 let isPaused;
+const settings = {};
 const timer = (option, settings, data) => {
+    const milsecsContainer = document.getElementById("timer__milsecs");
+    const secsContainer = document.getElementById("timer__secs");
+    const minsContainer = document.getElementById("timer__mins");
     let milsecs;
     let secs;
     let mins;
@@ -84,15 +86,18 @@ const timer = (option, settings, data) => {
         });
     };
     const startTabataMode = () => {
+        let isTimeElapsed = false;
         if (mins === settings.durationMinutes && secs === settings.durationSecs) {
-            const isTimeElapsed = true;
+            console.log("zerowanie");
+            isTimeElapsed = true;
             //wyzerowanie działa, teraz rest time
             resetTimer();
             startRest();
-            return isTimeElapsed;
         }
+        return isTimeElapsed;
     };
     if (timerMode === "ON_TIME") {
+        startTimer(startOnTimeMode);
     }
     if (timerMode === "TABATA") {
         let countRounds = 0;
@@ -104,16 +109,16 @@ const timer = (option, settings, data) => {
         })();
     }
 };
-const getCurrentTime = () => {
-    let milsecs = parseInt(milsecsContainer.textContent);
-    let secs = parseInt(secsContainer.textContent);
-    let mins = parseInt(minsContainer.textContent);
-    return {
-        milsecs,
-        secs,
-        mins
-    };
-};
+// const getCurrentTime = () => {
+//   let milsecs = parseInt(milsecsContainer.textContent!);
+//   let secs = parseInt(secsContainer.textContent!);
+//   let mins = parseInt(minsContainer.textContent!);
+//   return {
+//     milsecs,
+//     secs,
+//     mins
+//   };
+// };
 const clearTimer = (id) => {
     if (isPaused) {
         if (id) {
@@ -126,9 +131,9 @@ const clearTimer = (id) => {
     }
 };
 //Timer modes
-const onTimeOnly = (secs, mins) => {
-    const timeSetForMins = mins || 0; //
-    const timeSetForSecs = secs; //
+const onTimeOnly = (workSecs, workMins) => {
+    const timeSetForMins = workMins || 0; //
+    const timeSetForSecs = workSecs; //
     return timer("ON_TIME", { durationMinutes: timeSetForMins, durationSecs: timeSetForSecs }, _);
 };
 const tabata = (workSeconds, workMinutes, rest, rounds) => {
@@ -156,36 +161,67 @@ const renderContent = (el) => {
         return app.insertAdjacentElement("afterbegin", HTMLContent);
     }
 };
-const counter = () => {
+const addCounterListeners = () => {
     const counters = document.querySelectorAll(".select-time-container");
     counters.forEach(counter => {
         var _a, _b, _c, _d;
         (_b = (_a = counter.lastElementChild) === null || _a === void 0 ? void 0 : _a.firstElementChild) === null || _b === void 0 ? void 0 : _b.addEventListener("click", e => {
             //MINUS
-            var _a, _b;
-            const clickedEl = e.target;
-            let currentValue = parseInt((_a = clickedEl.parentElement.parentElement) === null || _a === void 0 ? void 0 : _a.children[1].textContent); // kontener gdzie ustawia się pożądany czas
-            const container = (_b = clickedEl.parentElement.parentElement) === null || _b === void 0 ? void 0 : _b.children[1];
-            currentValue <= 0 ? (currentValue = 0) : currentValue--;
-            container.textContent = currentValue.toString();
-            console.log(currentValue);
+            countSettings(e, "minus");
         });
         (_d = (_c = counter.lastElementChild) === null || _c === void 0 ? void 0 : _c.lastElementChild) === null || _d === void 0 ? void 0 : _d.addEventListener("click", e => {
             //PLUS
-            var _a, _b;
-            const clickedEl = e.target;
-            let currentValue = parseInt((_a = clickedEl.parentElement.parentElement) === null || _a === void 0 ? void 0 : _a.children[1].textContent); // kontener gdzie ustawia się pożądany czas
-            const container = (_b = clickedEl.parentElement.parentElement) === null || _b === void 0 ? void 0 : _b.children[1];
-            currentValue++;
-            container.textContent = currentValue.toString();
-            console.log(currentValue);
+            countSettings(e, "plus");
         });
     });
+};
+const countSettings = (e, operation) => {
+    var _a, _b;
+    const clickedEl = e.target;
+    let currentValue = parseInt((_a = clickedEl.parentElement.parentElement) === null || _a === void 0 ? void 0 : _a.children[1].textContent); // kontener gdzie ustawia się pożądany czas
+    const container = (_b = clickedEl.parentElement.parentElement) === null || _b === void 0 ? void 0 : _b.children[1];
+    currentValue <= 0 && (currentValue = 0);
+    if (operation === "plus") {
+        currentValue++;
+    }
+    else if (operation === "minus") {
+        currentValue--;
+    }
+    container.textContent = currentValue.toString();
+    if (container.classList.contains("seconds")) {
+        settings.durationSecs = currentValue;
+    }
+    if (container.classList.contains("minutes")) {
+        settings.durationMinutes = currentValue;
+    }
+    if (container.classList.contains("rest")) {
+        settings.rest = currentValue;
+    }
+    if (container.classList.contains("rounds")) {
+        settings.rounds = currentValue;
+    }
+    console.log(settings);
 };
 const backToHome = () => {
     const backBtn = document.querySelector(".back-btn");
     return backBtn.addEventListener("click", () => {
         reRenderUI();
+    });
+};
+const startTiming = (mode, settings) => {
+    const startBtn = document.querySelector(".start-btn");
+    startBtn.addEventListener("click", () => {
+        renderContent(timerUI);
+        switch (mode) {
+            case "on_time":
+                onTimeOnly(settings.durationSecs, settings.durationMinutes);
+                break;
+            case "tabata":
+                tabata(settings.durationSecs, settings.durationMinutes, settings.rest, settings.rounds);
+                break;
+            case "armrap":
+                break;
+        }
     });
 };
 const reRenderUI = () => {
@@ -194,19 +230,24 @@ const reRenderUI = () => {
     const tabataBtn = document.querySelector(".tabata");
     const armrapBtn = document.querySelector(".armrap");
     onTimeBtn.addEventListener("click", () => {
+        const mode = "on_time";
         renderContent(onTimeUI);
         backToHome();
-        counter();
+        addCounterListeners();
+        startTiming(mode, settings);
     });
     tabataBtn.addEventListener("click", () => {
+        const mode = "tabata";
         renderContent(tabataUI);
         backToHome();
-        counter();
+        addCounterListeners();
+        startTiming(mode, settings);
     });
     armrapBtn.addEventListener("click", () => {
+        const mode = "armrap";
         renderContent(armrapUI);
         backToHome();
-        counter();
+        addCounterListeners();
     });
 };
 document.addEventListener("DOMContentLoaded", reRenderUI);
