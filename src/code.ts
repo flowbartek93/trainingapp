@@ -48,9 +48,9 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   let secs: number;
   let mins: number;
 
-  let rounds: number | undefined = settings?.rounds;
-  let rest: number | undefined = settings?.rest;
-  const timerMode = option;
+  let rounds: number | undefined = 0;
+
+  const timerModeName: string = option;
 
   if (data) {
     milsecs = data.milsecs;
@@ -62,7 +62,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     mins = 0;
   }
 
-  const startTimer = (timerMode: () => boolean | undefined) => {
+  const startTimer = (timerMode: () => any) => {
     const startCount = setInterval(() => {
       if (milsecs >= 100) {
         milsecs = 0;
@@ -76,16 +76,18 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
         mins++;
       }
 
+      if (timerMode) {
+        const { isTimeElapsed, isTabataOver } = timerMode();
+
+        if (isTimeElapsed || isTabataOver) {
+          clearInterval(startCount);
+        }
+      }
+
       // milsecsContainer.textContent = milsecs === 1 && secs > 1 ? "00" : milsecs.toString();
       milsecsContainer.textContent = milsecs < 10 ? "0" + milsecs.toString() : milsecs.toString();
       secsContainer.textContent = secs < 10 ? "0" + secs.toString() : secs.toString();
       minsContainer.textContent = mins < 10 ? "0" + mins.toString() : mins.toString();
-
-      const timeElapsed = timerMode();
-
-      if (timeElapsed) {
-        clearInterval(startCount);
-      }
     }, 1);
 
     timerID = startCount;
@@ -104,52 +106,54 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   };
 
   const startOnTimeMode = () => {
-    if (mins === settings!.durationMinutes && secs === settings!.durationSecs) {
-      const isTimeElapsed: boolean = true;
+    let isTimeElapsed: boolean = false;
 
-      return isTimeElapsed;
+    if (mins === settings!.durationMinutes && secs === settings!.durationSecs) {
+      isTimeElapsed = true;
     }
+
+    return { isTimeElapsed };
   };
 
   const startRest = () => {
-    let endOfPause = false;
     resetTimer();
 
+    let isTimeElapsed = false;
+
     startTimer(() => {
-      if (secs === rest) {
-        endOfPause = true;
+      if (secs === settings?.rest) {
+        isTimeElapsed = true;
         resetTimer();
-        return endOfPause;
+        startTimer(startTabataMode);
       }
+      return { isTimeElapsed };
     });
   };
 
   const startTabataMode = () => {
     let isTimeElapsed: boolean = false;
+    let isTabataOver: boolean = false;
     if (mins === settings!.durationMinutes && secs === settings!.durationSecs) {
-      console.log("zerowanie");
-
+      if (rounds === settings?.rounds) {
+        isTabataOver = true;
+      } else {
+        startRest();
+        rounds!++;
+        console.log(rounds);
+      }
       isTimeElapsed = true;
-      //wyzerowanie działa, teraz rest time
-      resetTimer();
-      startRest();
     }
-    return isTimeElapsed;
+    return { isTimeElapsed, isTabataOver };
   };
 
-  if (timerMode === "ON_TIME") {
+  if (timerModeName === "ON_TIME") {
     startTimer(startOnTimeMode);
   }
 
-  if (timerMode === "TABATA") {
-    let countRounds: number = 0;
+  if (timerModeName === "TABATA") {
+    //tu trzeba naprawić liczenie rund
 
-    return (function () {
-      while (countRounds < rounds!) {
-        countRounds++;
-        startTimer(startTabataMode);
-      }
-    })();
+    startTimer(startTabataMode);
   }
 };
 
@@ -187,9 +191,9 @@ const onTimeOnly = (workSecs: number, workMins: number) => {
 
 const tabata = (workSeconds: number, workMinutes: number, rest: number, rounds: number) => {
   const workInSeconds = workSeconds;
-  const workInMinutes = workMinutes;
-  const restTime = rest;
-  const roundsNumber = rounds;
+  const workInMinutes = workMinutes || 0;
+  const restTime = rest || undefined;
+  const roundsNumber = rounds || undefined;
 
   return timer(
     "TABATA",
@@ -275,7 +279,7 @@ const backToHome = () => {
   });
 };
 
-const startTiming = (mode: string, settings: timerSettings) => {
+const runTimerBtn = (mode: string, settings: timerSettings) => {
   const startBtn = document.querySelector(".start-btn")! as HTMLButtonElement;
 
   startBtn.addEventListener("click", () => {
@@ -307,7 +311,7 @@ const reRenderUI = () => {
     backToHome();
     addCounterListeners();
 
-    startTiming(mode, settings);
+    runTimerBtn(mode, settings);
   });
 
   tabataBtn.addEventListener("click", () => {
@@ -316,7 +320,7 @@ const reRenderUI = () => {
     renderContent(tabataUI);
     backToHome();
     addCounterListeners();
-    startTiming(mode, settings);
+    runTimerBtn(mode, settings);
   });
 
   armrapBtn.addEventListener("click", () => {
