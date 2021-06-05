@@ -52,6 +52,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     }, 1);
 
     timerID = startCount;
+    return timerID;
   };
 
   const resetTimer = () => {
@@ -118,13 +119,28 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     return { isTimeElapsed };
   };
 
-  const clearTimer = (id: NodeJS.Timeout) => {
+  const stopTimer = () => {
     const stopBtn = document.querySelector(".stop-btn");
+    let id: NodeJS.Timeout;
 
     stopBtn?.addEventListener("click", () => {
-      stopBtn.firstElementChild?.classList.replace("fa-pause-circle", "fa-play-circle");
-      if (id) {
-        clearInterval(id);
+      if (stopBtn.classList.contains("active")) {
+        stopBtn.classList.remove("active");
+        stopBtn.firstElementChild?.classList.replace("fa-play-circle", "fa-pause-circle");
+
+        //continue timing
+        console.log(timerID);
+        id = startTimer(startArmrap);
+      } else {
+        stopBtn.classList.add("active");
+        stopBtn.firstElementChild?.classList.replace("fa-pause-circle", "fa-play-circle");
+
+        //pauza
+        if (id) {
+          clearInterval(id);
+        } else {
+          clearInterval(timerID);
+        }
       }
     });
   };
@@ -152,6 +168,6 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   if (timerModeName === "ARMRAP") {
     startTimer(startArmrap);
     armrapRoundCounter();
-    clearTimer(timerID!);
+    stopTimer();
   }
 };

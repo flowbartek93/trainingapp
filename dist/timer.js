@@ -44,6 +44,7 @@ const timer = (option, settings, data) => {
             minsContainer.textContent = mins < 10 ? "0" + mins.toString() : mins.toString();
         }, 1);
         timerID = startCount;
+        return timerID;
     };
     const resetTimer = () => {
         milsecsContainer.textContent = "00";
@@ -97,13 +98,28 @@ const timer = (option, settings, data) => {
         }
         return { isTimeElapsed };
     };
-    const clearTimer = (id) => {
+    const stopTimer = () => {
         const stopBtn = document.querySelector(".stop-btn");
+        let id;
         stopBtn === null || stopBtn === void 0 ? void 0 : stopBtn.addEventListener("click", () => {
-            var _a;
-            (_a = stopBtn.firstElementChild) === null || _a === void 0 ? void 0 : _a.classList.replace("fa-pause-circle", "fa-play-circle");
-            if (id) {
-                clearInterval(id);
+            var _a, _b;
+            if (stopBtn.classList.contains("active")) {
+                stopBtn.classList.remove("active");
+                (_a = stopBtn.firstElementChild) === null || _a === void 0 ? void 0 : _a.classList.replace("fa-play-circle", "fa-pause-circle");
+                //continue timing
+                console.log(timerID);
+                id = startTimer(startArmrap);
+            }
+            else {
+                stopBtn.classList.add("active");
+                (_b = stopBtn.firstElementChild) === null || _b === void 0 ? void 0 : _b.classList.replace("fa-pause-circle", "fa-play-circle");
+                //pauza
+                if (id) {
+                    clearInterval(id);
+                }
+                else {
+                    clearInterval(timerID);
+                }
             }
         });
     };
@@ -125,6 +141,6 @@ const timer = (option, settings, data) => {
     if (timerModeName === "ARMRAP") {
         startTimer(startArmrap);
         armrapRoundCounter();
-        clearTimer(timerID);
+        stopTimer();
     }
 };
