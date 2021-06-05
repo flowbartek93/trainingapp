@@ -101,9 +101,11 @@ const setTimer = (mode: string, settings: timerSettings) => {
 
     switch (mode) {
       case "on_time":
+        renderContent(ontimeTimer, true);
         onTimeOnly(settings.durationSecs!, settings.durationMinutes!);
         break;
       case "tabata":
+        renderContent(tabataTimer, true);
         tabata(settings.durationSecs!, settings.durationMinutes!, settings.rest!, settings.rounds!);
         break;
       case "armrap":

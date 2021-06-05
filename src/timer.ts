@@ -82,11 +82,15 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
 
     let isTimeElapsed = false;
 
+    const title = document.querySelector(".rest-time")! as HTMLParagraphElement;
+    title.style.display = "block";
+
     startTimer(() => {
       if (secs === settings?.rest) {
         isTimeElapsed = true;
         resetTimer();
         startTimer(startTabataMode);
+        title.style.display = "none";
       }
       return { isTimeElapsed };
     });
@@ -101,7 +105,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
       } else {
         startRest();
         rounds!++;
-        console.log(rounds);
+        RoundCounter("tabata");
       }
       isTimeElapsed = true;
     }
@@ -145,14 +149,20 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     });
   };
 
-  const armrapRoundCounter = () => {
-    const countBtn = document.querySelector(".count-armrap-round")! as HTMLButtonElement;
+  const RoundCounter = (mode: string) => {
     const roundNumberSpan = document.querySelector(".round-number")! as HTMLSpanElement;
 
-    return countBtn.addEventListener("click", () => {
-      rounds!++;
-      roundNumberSpan.textContent = rounds!.toString();
-    });
+    if (mode === "armrap") {
+      const countBtn = document.querySelector(".count-armrap-round")! as HTMLButtonElement;
+      return countBtn.addEventListener("click", () => {
+        rounds!++;
+        roundNumberSpan.textContent = rounds!.toString();
+      });
+    }
+
+    if (mode === "tabata") {
+      return (roundNumberSpan.textContent = rounds!.toString());
+    }
   };
 
   if (timerModeName === "ON_TIME") {
@@ -163,11 +173,12 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     //tu trzeba naprawić liczenie rund
 
     startTimer(startTabataMode);
+    RoundCounter("tabata");
   }
 
   if (timerModeName === "ARMRAP") {
     startTimer(startArmrap);
-    armrapRoundCounter();
+    RoundCounter("armrap");
     stopTimer();
   }
 };

@@ -65,11 +65,14 @@ const timer = (option, settings, data) => {
     const startRest = () => {
         resetTimer();
         let isTimeElapsed = false;
+        const title = document.querySelector(".rest-time");
+        title.style.display = "block";
         startTimer(() => {
             if (secs === (settings === null || settings === void 0 ? void 0 : settings.rest)) {
                 isTimeElapsed = true;
                 resetTimer();
                 startTimer(startTabataMode);
+                title.style.display = "none";
             }
             return { isTimeElapsed };
         });
@@ -84,7 +87,7 @@ const timer = (option, settings, data) => {
             else {
                 startRest();
                 rounds++;
-                console.log(rounds);
+                RoundCounter("tabata");
             }
             isTimeElapsed = true;
         }
@@ -123,13 +126,18 @@ const timer = (option, settings, data) => {
             }
         });
     };
-    const armrapRoundCounter = () => {
-        const countBtn = document.querySelector(".count-armrap-round");
+    const RoundCounter = (mode) => {
         const roundNumberSpan = document.querySelector(".round-number");
-        return countBtn.addEventListener("click", () => {
-            rounds++;
-            roundNumberSpan.textContent = rounds.toString();
-        });
+        if (mode === "armrap") {
+            const countBtn = document.querySelector(".count-armrap-round");
+            return countBtn.addEventListener("click", () => {
+                rounds++;
+                roundNumberSpan.textContent = rounds.toString();
+            });
+        }
+        if (mode === "tabata") {
+            return (roundNumberSpan.textContent = rounds.toString());
+        }
     };
     if (timerModeName === "ON_TIME") {
         startTimer(startOnTimeMode);
@@ -137,10 +145,11 @@ const timer = (option, settings, data) => {
     if (timerModeName === "TABATA") {
         //tu trzeba naprawić liczenie rund
         startTimer(startTabataMode);
+        RoundCounter("tabata");
     }
     if (timerModeName === "ARMRAP") {
         startTimer(startArmrap);
-        armrapRoundCounter();
+        RoundCounter("armrap");
         stopTimer();
     }
 };

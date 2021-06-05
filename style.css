@@ -188,12 +188,28 @@ body {
 .count-armrap-round:hover {
   filter: brightness(110%);
 }
-.armrap-round-number {
+.round-number-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   font-size: 2.5rem;
   position: absolute;
   top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.rest-time {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 1.8rem;
+  color: lightskyblue;
+  text-transform: uppercase;
+  display: none;
 }
 
 .stop-btn {
