@@ -1,6 +1,6 @@
 //Important values;
 let isCounting: boolean | null = null;
-let timerID: number | NodeJS.Timeout | null;
+let timerID: NodeJS.Timeout;
 let isPaused: boolean;
 
 //Types

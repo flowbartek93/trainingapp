@@ -107,9 +107,9 @@
 
         <div class="select-time-container">
           <p>minutes:</p>
-          <span class="select-time-secs">
+          <span class="select-time-mins">
             <span class="minus"><i class="fas fa-minus"></i></span>
-            <span class="set-time-span">00</span>
+            <span class="minutes">00</span>
 
             <span class="plus"><i class="fas fa-plus"></i></span>
           </span>
@@ -119,7 +119,7 @@
           <p>seconds:</p>
           <span class="select-time-secs">
             <span class="minus"><i class="fas fa-minus"></i></span>
-            <span class="set-time-span">00</span>
+            <span class="seconds">00</span>
 
             <span class="plus"><i class="fas fa-plus"></i></span>
           </span>
@@ -136,9 +136,16 @@
     </template>
 
     <template class="timer-armrap-template">
-      <div class="armrap-counter-container">
-        <p>Count round!</p>
-        <button class="count-armrap-round">+</button>
+      <div>
+        <div class="armrap-counter-container">
+          <p>Count round!</p>
+          <button class="count-armrap-round">+</button>
+        </div>
+        <div class="armrap-round-number">round number: <span class="round-number">0</span></div>
+
+        <button class="stop-btn">
+          <i class="fas fa-pause-circle"></i>
+        </button>
       </div>
     </template>
 

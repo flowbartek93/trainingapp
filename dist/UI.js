@@ -18,6 +18,7 @@ const renderContent = (el, timerSpecific) => {
     const HTMLContent = importedNode.firstElementChild;
     if ((_a = app.firstElementChild) === null || _a === void 0 ? void 0 : _a.hasChildNodes()) {
         if (timerSpecific) {
+            console.log(HTMLContent);
             return app.insertAdjacentElement("beforeend", HTMLContent);
         }
         else {

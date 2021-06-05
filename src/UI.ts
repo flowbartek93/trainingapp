@@ -24,6 +24,7 @@ const renderContent = (el: HTMLTemplateElement, timerSpecific: boolean) => {
 
   if (app.firstElementChild?.hasChildNodes()) {
     if (timerSpecific) {
+      console.log(HTMLContent);
       return app.insertAdjacentElement("beforeend", HTMLContent);
     } else {
       app.firstElementChild.remove();

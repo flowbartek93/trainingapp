@@ -111,10 +111,32 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     let isTimeElapsed: boolean = false;
 
     if (mins === settings!.durationMinutes && secs === settings!.durationSecs) {
+      console.log("over");
       isTimeElapsed = true;
     }
 
     return { isTimeElapsed };
+  };
+
+  const clearTimer = (id: NodeJS.Timeout) => {
+    const stopBtn = document.querySelector(".stop-btn");
+
+    stopBtn?.addEventListener("click", () => {
+      stopBtn.firstElementChild?.classList.replace("fa-pause-circle", "fa-play-circle");
+      if (id) {
+        clearInterval(id);
+      }
+    });
+  };
+
+  const armrapRoundCounter = () => {
+    const countBtn = document.querySelector(".count-armrap-round")! as HTMLButtonElement;
+    const roundNumberSpan = document.querySelector(".round-number")! as HTMLSpanElement;
+
+    return countBtn.addEventListener("click", () => {
+      rounds!++;
+      roundNumberSpan.textContent = rounds!.toString();
+    });
   };
 
   if (timerModeName === "ON_TIME") {
@@ -129,5 +151,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
 
   if (timerModeName === "ARMRAP") {
     startTimer(startArmrap);
+    armrapRoundCounter();
+    clearTimer(timerID!);
   }
 };
