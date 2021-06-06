@@ -192,43 +192,65 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-
+  flex-direction: column;
   font-size: 2.5rem;
   position: absolute;
-  top: 20%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
+.round-number {
+  color: lightskyblue;
+}
+.round-number-total {
+  color: brown;
+}
+
 .rest-time {
   position: absolute;
-  top: 60%;
+  top: 80%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 2.6rem;
   color: lightskyblue;
   text-transform: uppercase;
   display: none;
 }
 
-.stop-btn {
+.button-container {
   position: absolute;
-  top: 30%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -10%);
-  font-size: 5rem;
 
-  background-color: white;
-  border-radius: 50%;
-  border: 2px solid white;
-  color: #111111;
-  outline: none;
   transition: 0.2s ease;
-  cursor: pointer;
+
+  display: flex;
+  flex-direction: row;
+  width: 500px;
+  justify-content: space-between;
 }
 
-.stop-btn:hover {
-  background-color: white;
-  color: brown;
+.btn {
+  text-transform: uppercase;
+  width: 150px;
+  height: 70px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  font-size: 2rem;
+}
+
+.stop-btn {
+  background-color: lightskyblue;
+}
+.reset-btn {
+  background-color: lightseagreen;
+}
+
+.stop-btn,
+.reset-btn:hover {
+  filter: brightness(110%);
 }

@@ -4,12 +4,14 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   const milsecsContainer = document.getElementById("timer__milsecs")! as HTMLSpanElement;
   const secsContainer = document.getElementById("timer__secs")! as HTMLSpanElement;
   const minsContainer = document.getElementById("timer__mins")! as HTMLSpanElement;
+  const resetBtn = document.querySelector(".reset-btn")! as HTMLButtonElement;
 
   let milsecs: number;
   let secs: number;
   let mins: number;
 
-  let rounds: number | undefined = 0;
+  let rounds: number | undefined = 1;
+  let isPaused: boolean = false;
 
   const timerModeName: string = option;
 
@@ -56,15 +58,20 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   };
 
   const resetTimer = () => {
-    milsecsContainer.textContent = "00";
-    secsContainer.textContent = "00";
-    minsContainer.textContent = "00";
+    if (isPaused) {
+      resetBtn.disabled = false;
+      resetBtn?.addEventListener("click", () => {
+        milsecsContainer.textContent = "00";
+        secsContainer.textContent = "00";
+        minsContainer.textContent = "00";
 
-    milsecs = 0;
-    secs = 0;
-    mins = 0;
+        milsecs = 0;
+        secs = 0;
+        mins = 0;
 
-    console.log("resetuje");
+        console.log("resetuje");
+      });
+    }
   };
 
   const startOnTimeMode = () => {
@@ -89,6 +96,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
       if (secs === settings?.rest) {
         isTimeElapsed = true;
         resetTimer();
+        RoundCounter("tabata"); // automatyczne zliczenie rundy
         startTimer(startTabataMode);
         title.style.display = "none";
       }
@@ -99,13 +107,13 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   const startTabataMode = () => {
     let isTimeElapsed: boolean = false;
     let isTabataOver: boolean = false;
+
     if (mins === settings!.durationMinutes && secs === settings!.durationSecs) {
       if (rounds === settings?.rounds) {
         isTabataOver = true;
       } else {
-        startRest();
         rounds!++;
-        RoundCounter("tabata");
+        startRest();
       }
       isTimeElapsed = true;
     }
@@ -129,17 +137,19 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
 
     stopBtn?.addEventListener("click", () => {
       if (stopBtn.classList.contains("active")) {
-        stopBtn.classList.remove("active");
-        stopBtn.firstElementChild?.classList.replace("fa-play-circle", "fa-pause-circle");
-
         //continue timing
-        console.log(timerID);
+        stopBtn.classList.remove("active");
+        stopBtn.textContent = "stop !";
+        isPaused = false;
+        resetBtn.disabled = true;
         id = startTimer(startArmrap);
       } else {
-        stopBtn.classList.add("active");
-        stopBtn.firstElementChild?.classList.replace("fa-pause-circle", "fa-play-circle");
-
         //pauza
+        stopBtn.classList.add("active");
+        stopBtn.textContent = "go !";
+        isPaused = true;
+        resetTimer();
+
         if (id) {
           clearInterval(id);
         } else {
@@ -151,6 +161,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
 
   const RoundCounter = (mode: string) => {
     const roundNumberSpan = document.querySelector(".round-number")! as HTMLSpanElement;
+    const roundNumberTotal = document.querySelector(".round-number-total")! as HTMLSpanElement;
 
     if (mode === "armrap") {
       const countBtn = document.querySelector(".count-armrap-round")! as HTMLButtonElement;
@@ -161,12 +172,17 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     }
 
     if (mode === "tabata") {
-      return (roundNumberSpan.textContent = rounds!.toString());
+      if (rounds === settings?.rounds) {
+        roundNumberSpan.style.color = "brown";
+      }
+      roundNumberSpan.textContent = rounds!.toString();
+      roundNumberTotal.textContent = settings!.rounds!.toString();
     }
   };
 
   if (timerModeName === "ON_TIME") {
     startTimer(startOnTimeMode);
+    stopTimer();
   }
 
   if (timerModeName === "TABATA") {
@@ -174,11 +190,12 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
 
     startTimer(startTabataMode);
     RoundCounter("tabata");
+    stopTimer();
   }
 
   if (timerModeName === "ARMRAP") {
     startTimer(startArmrap);
-    RoundCounter("armrap");
+    RoundCounter("armrap"); // nasłuchiwanie na button
     stopTimer();
   }
 };

@@ -143,28 +143,36 @@
         </div>
         <div class="round-number-container">round number: <span class="round-number">0</span></div>
 
-        <button class="stop-btn">
-          <i class="fas fa-pause-circle"></i>
-        </button>
+        <div class="button-container">
+          <button class="btn stop-btn">stop</button>
+          <button class="btn reset-btn" disabled>reset</button>
+        </div>
       </div>
     </template>
 
     <template class="timer-tabata-template">
       <div>
-        <div class="round-number-container">round number: <span class="round-number">0</span></div>
+        <div class="round-number-container">
+          Round number: <span class="round-number">0</span>
+
+          Total rounds: <span class="round-number-total">0</span>
+        </div>
+
         <p class="rest-time">Rest</p>
 
-        <button class="stop-btn">
-          <i class="fas fa-pause-circle"></i>
-        </button>
+        <div class="button-container">
+          <button class="btn stop-btn">stop</button>
+          <button class="btn reset-btn" disabled>reset</button>
+        </div>
       </div>
     </template>
 
     <template class="timer-ontime-template">
-      <div class="armrap-counter-container">
-        <button class="stop-btn">
-          <i class="fas fa-pause-circle"></i>
-        </button>
+      <div>
+        <div class="button-container">
+          <button class="btn stop-btn">stop</button>
+          <button class="btn reset-btn" disabled>reset</button>
+        </div>
       </div>
     </template>
 

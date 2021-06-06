@@ -4,10 +4,12 @@ const timer = (option, settings, data) => {
     const milsecsContainer = document.getElementById("timer__milsecs");
     const secsContainer = document.getElementById("timer__secs");
     const minsContainer = document.getElementById("timer__mins");
+    const resetBtn = document.querySelector(".reset-btn");
     let milsecs;
     let secs;
     let mins;
-    let rounds = 0;
+    let rounds = 1;
+    let isPaused = false;
     const timerModeName = option;
     if (data) {
         milsecs = data.milsecs;
@@ -47,13 +49,18 @@ const timer = (option, settings, data) => {
         return timerID;
     };
     const resetTimer = () => {
-        milsecsContainer.textContent = "00";
-        secsContainer.textContent = "00";
-        minsContainer.textContent = "00";
-        milsecs = 0;
-        secs = 0;
-        mins = 0;
-        console.log("resetuje");
+        if (isPaused) {
+            resetBtn.disabled = false;
+            resetBtn === null || resetBtn === void 0 ? void 0 : resetBtn.addEventListener("click", () => {
+                milsecsContainer.textContent = "00";
+                secsContainer.textContent = "00";
+                minsContainer.textContent = "00";
+                milsecs = 0;
+                secs = 0;
+                mins = 0;
+                console.log("resetuje");
+            });
+        }
     };
     const startOnTimeMode = () => {
         let isTimeElapsed = false;
@@ -71,6 +78,7 @@ const timer = (option, settings, data) => {
             if (secs === (settings === null || settings === void 0 ? void 0 : settings.rest)) {
                 isTimeElapsed = true;
                 resetTimer();
+                RoundCounter("tabata"); // automatyczne zliczenie rundy
                 startTimer(startTabataMode);
                 title.style.display = "none";
             }
@@ -85,9 +93,8 @@ const timer = (option, settings, data) => {
                 isTabataOver = true;
             }
             else {
-                startRest();
                 rounds++;
-                RoundCounter("tabata");
+                startRest();
             }
             isTimeElapsed = true;
         }
@@ -105,18 +112,20 @@ const timer = (option, settings, data) => {
         const stopBtn = document.querySelector(".stop-btn");
         let id;
         stopBtn === null || stopBtn === void 0 ? void 0 : stopBtn.addEventListener("click", () => {
-            var _a, _b;
             if (stopBtn.classList.contains("active")) {
-                stopBtn.classList.remove("active");
-                (_a = stopBtn.firstElementChild) === null || _a === void 0 ? void 0 : _a.classList.replace("fa-play-circle", "fa-pause-circle");
                 //continue timing
-                console.log(timerID);
+                stopBtn.classList.remove("active");
+                stopBtn.textContent = "stop !";
+                isPaused = false;
+                resetBtn.disabled = true;
                 id = startTimer(startArmrap);
             }
             else {
-                stopBtn.classList.add("active");
-                (_b = stopBtn.firstElementChild) === null || _b === void 0 ? void 0 : _b.classList.replace("fa-pause-circle", "fa-play-circle");
                 //pauza
+                stopBtn.classList.add("active");
+                stopBtn.textContent = "go !";
+                isPaused = true;
+                resetTimer();
                 if (id) {
                     clearInterval(id);
                 }
@@ -128,6 +137,7 @@ const timer = (option, settings, data) => {
     };
     const RoundCounter = (mode) => {
         const roundNumberSpan = document.querySelector(".round-number");
+        const roundNumberTotal = document.querySelector(".round-number-total");
         if (mode === "armrap") {
             const countBtn = document.querySelector(".count-armrap-round");
             return countBtn.addEventListener("click", () => {
@@ -136,20 +146,26 @@ const timer = (option, settings, data) => {
             });
         }
         if (mode === "tabata") {
-            return (roundNumberSpan.textContent = rounds.toString());
+            if (rounds === (settings === null || settings === void 0 ? void 0 : settings.rounds)) {
+                roundNumberSpan.style.color = "brown";
+            }
+            roundNumberSpan.textContent = rounds.toString();
+            roundNumberTotal.textContent = settings.rounds.toString();
         }
     };
     if (timerModeName === "ON_TIME") {
         startTimer(startOnTimeMode);
+        stopTimer();
     }
     if (timerModeName === "TABATA") {
         //tu trzeba naprawić liczenie rund
         startTimer(startTabataMode);
         RoundCounter("tabata");
+        stopTimer();
     }
     if (timerModeName === "ARMRAP") {
         startTimer(startArmrap);
-        RoundCounter("armrap");
+        RoundCounter("armrap"); // nasłuchiwanie na button
         stopTimer();
     }
 };

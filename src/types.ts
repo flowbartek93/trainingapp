@@ -18,5 +18,3 @@ type timerSettings = {
 };
 
 const settings: timerSettings = {};
-
-type clearTimer = (id: number | NodeJS.Timeout | null) => void;
