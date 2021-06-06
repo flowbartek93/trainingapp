@@ -7,8 +7,6 @@ const tabataUI = document.querySelector(".tabata-template") as HTMLTemplateEleme
 const armrapUI = document.querySelector(".armrap-template") as HTMLTemplateElement;
 const selectUI = document.querySelector(".select-template") as HTMLTemplateElement;
 
-const timerUI = document.querySelector(".timer-template") as HTMLTemplateElement;
-
 //timer specific templates
 
 const armrapTimer = document.querySelector(".timer-armrap-template") as HTMLTemplateElement;
@@ -18,18 +16,13 @@ const ontimeTimer = document.querySelector(".timer-ontime-template") as HTMLTemp
 //render container
 const app = document.getElementById("app")!;
 
-const renderContent = (el: HTMLTemplateElement, timerSpecific: boolean) => {
+const renderContent = (el: HTMLTemplateElement) => {
   const importedNode = document.importNode(el.content, true);
   const HTMLContent = importedNode.firstElementChild as HTMLElement;
 
   if (app.firstElementChild?.hasChildNodes()) {
-    if (timerSpecific) {
-      console.log(HTMLContent);
-      return app.insertAdjacentElement("beforeend", HTMLContent);
-    } else {
-      app.firstElementChild.remove();
-      return app.insertAdjacentElement("afterbegin", HTMLContent);
-    }
+    app.firstElementChild.remove();
+    return app.insertAdjacentElement("afterbegin", HTMLContent);
   } else {
     return app.insertAdjacentElement("afterbegin", HTMLContent);
   }
@@ -97,19 +90,17 @@ const setTimer = (mode: string, settings: timerSettings) => {
   const startBtn = document.querySelector(".start-btn")! as HTMLButtonElement;
 
   startBtn.addEventListener("click", () => {
-    renderContent(timerUI, false); //rendering timera, bez względu na mode
-
     switch (mode) {
       case "on_time":
-        renderContent(ontimeTimer, true);
+        renderContent(ontimeTimer);
         onTimeOnly(settings.durationSecs!, settings.durationMinutes!);
         break;
       case "tabata":
-        renderContent(tabataTimer, true);
+        renderContent(tabataTimer);
         tabata(settings.durationSecs!, settings.durationMinutes!, settings.rest!, settings.rounds!);
         break;
       case "armrap":
-        renderContent(armrapTimer, true);
+        renderContent(armrapTimer);
         armrap(settings.durationSecs!, settings.durationMinutes!);
         break;
     }
@@ -117,7 +108,7 @@ const setTimer = (mode: string, settings: timerSettings) => {
 };
 
 const reRenderUI = () => {
-  renderContent(selectUI, false);
+  renderContent(selectUI);
 
   const onTimeBtn = document.querySelector(".on-time")! as HTMLDivElement;
   const tabataBtn = document.querySelector(".tabata")! as HTMLDivElement;
@@ -126,7 +117,7 @@ const reRenderUI = () => {
   onTimeBtn.addEventListener("click", () => {
     const mode = "on_time";
 
-    renderContent(onTimeUI, false);
+    renderContent(onTimeUI);
     backToHome();
     addCounterListeners();
 
@@ -136,7 +127,7 @@ const reRenderUI = () => {
   tabataBtn.addEventListener("click", () => {
     const mode = "tabata";
 
-    renderContent(tabataUI, false);
+    renderContent(tabataUI);
     backToHome();
     addCounterListeners();
     setTimer(mode, settings);
@@ -145,7 +136,7 @@ const reRenderUI = () => {
   armrapBtn.addEventListener("click", () => {
     const mode = "armrap";
 
-    renderContent(armrapUI, false);
+    renderContent(armrapUI);
     backToHome();
     addCounterListeners();
 

@@ -19,14 +19,8 @@ body {
   height: 100%;
 }
 
-.timer {
-  position: absolute;
-  width: 100%;
-  top: 50%;
-  transform: translateY(-50%);
+#timer {
   font-size: 3rem;
-  display: flex;
-  justify-content: center;
 }
 
 /* HOME */
@@ -43,6 +37,14 @@ body {
   flex-direction: column;
   width: 100%;
   font-size: 1.5rem;
+}
+
+.timer-settings {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .select {
@@ -91,19 +93,9 @@ body {
 }
 
 .start-btn {
-  height: 50px;
-  width: 50px;
+  color: white;
   background-color: brown;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  border: none;
-  font-weight: 900;
-  font-size: 1rem;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  margin: 50px 0;
-  flex-shrink: 0;
 }
 .start-btn:hover {
   filter: brightness(120%);
@@ -151,7 +143,7 @@ body {
   background-color: brown;
   border: 2px solid white;
   font-family: "Roboto Mono", monospace;
-  font-size: 1rem;
+  font-size: 1.5rem !important;
   color: white;
   cursor: pointer;
   border-radius: 5px;
@@ -164,13 +156,11 @@ body {
 .armrap-counter-container {
   display: flex;
   flex-direction: row;
-  position: absolute;
-  top: 60%;
-  left: 50%;
   width: max-content;
   justify-content: center;
   align-items: center;
   font-size: 1.3rem;
+  margin-top: 2.5rem;
 }
 .count-armrap-round {
   height: 50px;
@@ -189,15 +179,12 @@ body {
   filter: brightness(110%);
 }
 .round-number-container {
+  margin-bottom: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   font-size: 2.5rem;
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .round-number {
@@ -220,17 +207,17 @@ body {
 }
 
 .button-container {
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -10%);
+  position: relative;
 
+  align-items: center;
   transition: 0.2s ease;
-
   display: flex;
   flex-direction: row;
   width: 500px;
   justify-content: space-between;
+}
+
+.button-container-controls {
 }
 
 .btn {

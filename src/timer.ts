@@ -194,6 +194,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   }
 
   if (timerModeName === "ARMRAP") {
+    rounds = 0;
     startTimer(startArmrap);
     RoundCounter("armrap"); // nasłuchiwanie na button
     stopTimer();

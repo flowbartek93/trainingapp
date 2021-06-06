@@ -5,26 +5,19 @@ const onTimeUI = document.querySelector(".on-time-template");
 const tabataUI = document.querySelector(".tabata-template");
 const armrapUI = document.querySelector(".armrap-template");
 const selectUI = document.querySelector(".select-template");
-const timerUI = document.querySelector(".timer-template");
 //timer specific templates
 const armrapTimer = document.querySelector(".timer-armrap-template");
 const tabataTimer = document.querySelector(".timer-tabata-template");
 const ontimeTimer = document.querySelector(".timer-ontime-template");
 //render container
 const app = document.getElementById("app");
-const renderContent = (el, timerSpecific) => {
+const renderContent = (el) => {
     var _a;
     const importedNode = document.importNode(el.content, true);
     const HTMLContent = importedNode.firstElementChild;
     if ((_a = app.firstElementChild) === null || _a === void 0 ? void 0 : _a.hasChildNodes()) {
-        if (timerSpecific) {
-            console.log(HTMLContent);
-            return app.insertAdjacentElement("beforeend", HTMLContent);
-        }
-        else {
-            app.firstElementChild.remove();
-            return app.insertAdjacentElement("afterbegin", HTMLContent);
-        }
+        app.firstElementChild.remove();
+        return app.insertAdjacentElement("afterbegin", HTMLContent);
     }
     else {
         return app.insertAdjacentElement("afterbegin", HTMLContent);
@@ -80,45 +73,44 @@ const backToHome = () => {
 const setTimer = (mode, settings) => {
     const startBtn = document.querySelector(".start-btn");
     startBtn.addEventListener("click", () => {
-        renderContent(timerUI, false); //rendering timera, bez względu na mode
         switch (mode) {
             case "on_time":
-                renderContent(ontimeTimer, true);
+                renderContent(ontimeTimer);
                 onTimeOnly(settings.durationSecs, settings.durationMinutes);
                 break;
             case "tabata":
-                renderContent(tabataTimer, true);
+                renderContent(tabataTimer);
                 tabata(settings.durationSecs, settings.durationMinutes, settings.rest, settings.rounds);
                 break;
             case "armrap":
-                renderContent(armrapTimer, true);
+                renderContent(armrapTimer);
                 armrap(settings.durationSecs, settings.durationMinutes);
                 break;
         }
     });
 };
 const reRenderUI = () => {
-    renderContent(selectUI, false);
+    renderContent(selectUI);
     const onTimeBtn = document.querySelector(".on-time");
     const tabataBtn = document.querySelector(".tabata");
     const armrapBtn = document.querySelector(".armrap");
     onTimeBtn.addEventListener("click", () => {
         const mode = "on_time";
-        renderContent(onTimeUI, false);
+        renderContent(onTimeUI);
         backToHome();
         addCounterListeners();
         setTimer(mode, settings);
     });
     tabataBtn.addEventListener("click", () => {
         const mode = "tabata";
-        renderContent(tabataUI, false);
+        renderContent(tabataUI);
         backToHome();
         addCounterListeners();
         setTimer(mode, settings);
     });
     armrapBtn.addEventListener("click", () => {
         const mode = "armrap";
-        renderContent(armrapUI, false);
+        renderContent(armrapUI);
         backToHome();
         addCounterListeners();
         setTimer(mode, settings);

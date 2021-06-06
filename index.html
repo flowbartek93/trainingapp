@@ -20,38 +20,40 @@
 
     <template class="on-time-template">
       <div class="main-container">
-        <button class="back-btn">Select different mode</button>
+        <div class="timer-settings">
+          <p class="title-mode">On Time Mode</p>
+          <p class="title-second">Set your time</p>
 
-        <p class="title-mode">On Time Mode</p>
-        <p class="title-second">Set your time</p>
+          <div class="select-time-container">
+            <p>minutes:</p>
+            <span class="select-time-mins">
+              <span class="minus"><i class="fas fa-minus"></i></span>
+              <span class="minutes">00</span>
 
-        <div class="select-time-container">
-          <p>minutes:</p>
-          <span class="select-time-mins">
-            <span class="minus"><i class="fas fa-minus"></i></span>
-            <span class="minutes">00</span>
+              <span class="plus"><i class="fas fa-plus"></i></span>
+            </span>
+          </div>
 
-            <span class="plus"><i class="fas fa-plus"></i></span>
-          </span>
+          <div class="select-time-container">
+            <p>seconds:</p>
+            <span class="select-time-secs">
+              <span class="minus"><i class="fas fa-minus"></i></span>
+              <span class="seconds">00</span>
+
+              <span class="plus"><i class="fas fa-plus"></i></span>
+            </span>
+          </div>
         </div>
 
-        <div class="select-time-container">
-          <p>seconds:</p>
-          <span class="select-time-secs">
-            <span class="minus"><i class="fas fa-minus"></i></span>
-            <span class="seconds">00</span>
-
-            <span class="plus"><i class="fas fa-plus"></i></span>
-          </span>
+        <div class="button-container">
+          <button class="btn back-btn">change mode</button>
+          <button class="btn start-btn">start</button>
         </div>
-
-        <button class="start-btn"><i class="fas fa-play"></i></button>
       </div>
     </template>
 
     <template class="tabata-template">
       <div class="main-container">
-        <button class="back-btn">Select different mode</button>
         <p class="title-mode">Tabata mode</p>
         <p class="title-second">Set your time, rounds and rest time</p>
 
@@ -95,13 +97,15 @@
           </span>
         </div>
 
-        <button class="start-btn"><i class="fas fa-play"></i></button>
+        <div class="button-container">
+          <button class="btn back-btn">change mode</button>
+          <button class="btn start-btn">start</button>
+        </div>
       </div>
     </template>
 
     <template class="armrap-template">
       <div class="main-container">
-        <button class="back-btn">Select different mode</button>
         <p class="title-mode">Armrap mode</p>
         <p class="title-second">As many rounds as possible in given time</p>
 
@@ -125,33 +129,35 @@
           </span>
         </div>
 
-        <button class="start-btn"><i class="fas fa-play"></i></button>
-      </div>
-    </template>
-
-    <template class="timer-template">
-      <div id="timer" class="timer">
-        <span id="timer__mins">00</span>:<span id="timer__secs">00</span>:<span id="timer__milsecs">00</span>
+        <div class="button-container">
+          <button class="btn back-btn">change mode</button>
+          <button class="btn start-btn">start</button>
+        </div>
       </div>
     </template>
 
     <template class="timer-armrap-template">
-      <div>
-        <div class="armrap-counter-container">
-          <p>Count round!</p>
-          <button class="count-armrap-round">+</button>
-        </div>
-        <div class="round-number-container">round number: <span class="round-number">0</span></div>
+      <div class="main-container">
+        <div class="round-number-container">rounds completed: <span class="round-number">0</span></div>
 
-        <div class="button-container">
+        <div id="timer">
+          <span id="timer__mins">00</span>:<span id="timer__secs">00</span>:<span id="timer__milsecs">00</span>
+        </div>
+
+        <div class="button-container-controls">
           <button class="btn stop-btn">stop</button>
           <button class="btn reset-btn" disabled>reset</button>
+        </div>
+
+        <div class="armrap-counter-container">
+          <p>Count round</p>
+          <button class="count-armrap-round">+</button>
         </div>
       </div>
     </template>
 
     <template class="timer-tabata-template">
-      <div>
+      <div class="main-container">
         <div class="round-number-container">
           Round number: <span class="round-number">0</span>
 
@@ -160,7 +166,11 @@
 
         <p class="rest-time">Rest</p>
 
-        <div class="button-container">
+        <div id="timer">
+          <span id="timer__mins">00</span>:<span id="timer__secs">00</span>:<span id="timer__milsecs">00</span>
+        </div>
+
+        <div class="button-container-controls">
           <button class="btn stop-btn">stop</button>
           <button class="btn reset-btn" disabled>reset</button>
         </div>
@@ -168,8 +178,12 @@
     </template>
 
     <template class="timer-ontime-template">
-      <div>
-        <div class="button-container">
+      <div class="main-container">
+        <div id="timer">
+          <span id="timer__mins">00</span>:<span id="timer__secs">00</span>:<span id="timer__milsecs">00</span>
+        </div>
+
+        <div class="button-container-controls">
           <button class="btn stop-btn">stop</button>
           <button class="btn reset-btn" disabled>reset</button>
         </div>
