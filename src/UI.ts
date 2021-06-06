@@ -21,15 +21,18 @@ const renderContent = (el: HTMLTemplateElement) => {
   const HTMLContent = importedNode.firstElementChild as HTMLElement;
 
   if (app.firstElementChild?.hasChildNodes()) {
+    console.log("re render po cofnieciu");
     app.firstElementChild.remove();
-    return app.insertAdjacentElement("afterbegin", HTMLContent);
+    app.insertAdjacentElement("afterbegin", HTMLContent);
   } else {
-    return app.insertAdjacentElement("afterbegin", HTMLContent);
+    app.insertAdjacentElement("afterbegin", HTMLContent);
   }
 };
 
 const addCounterListeners = () => {
   const counters = document.querySelectorAll(".select-time-container");
+
+  console.log("listeners");
 
   counters.forEach(counter => {
     counter.lastElementChild?.firstElementChild?.addEventListener("click", e => {
@@ -91,20 +94,27 @@ const setTimer = (mode: string, settings: timerSettings) => {
 
   startBtn.addEventListener("click", () => {
     switch (mode) {
-      case "on_time":
+      case "ON_TIME":
         renderContent(ontimeTimer);
         onTimeOnly(settings.durationSecs!, settings.durationMinutes!);
         break;
-      case "tabata":
+      case "TABATA":
         renderContent(tabataTimer);
         tabata(settings.durationSecs!, settings.durationMinutes!, settings.rest!, settings.rounds!);
         break;
-      case "armrap":
+      case "ARMRAP":
         renderContent(armrapTimer);
         armrap(settings.durationSecs!, settings.durationMinutes!);
         break;
     }
   });
+};
+
+const reRenderSettings = (mode: HTMLTemplateElement, modeName: string) => {
+  renderContent(mode);
+  addCounterListeners();
+  setTimer(modeName, settings);
+  backToHome();
 };
 
 const reRenderUI = () => {
@@ -115,7 +125,7 @@ const reRenderUI = () => {
   const armrapBtn = document.querySelector(".armrap")! as HTMLDivElement;
 
   onTimeBtn.addEventListener("click", () => {
-    const mode = "on_time";
+    const mode = "ON_TIME";
 
     renderContent(onTimeUI);
     backToHome();
@@ -125,7 +135,7 @@ const reRenderUI = () => {
   });
 
   tabataBtn.addEventListener("click", () => {
-    const mode = "tabata";
+    const mode = "TABATA";
 
     renderContent(tabataUI);
     backToHome();
@@ -134,7 +144,7 @@ const reRenderUI = () => {
   });
 
   armrapBtn.addEventListener("click", () => {
-    const mode = "armrap";
+    const mode = "ARMRAP";
 
     renderContent(armrapUI);
     backToHome();

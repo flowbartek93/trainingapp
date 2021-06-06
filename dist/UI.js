@@ -16,15 +16,17 @@ const renderContent = (el) => {
     const importedNode = document.importNode(el.content, true);
     const HTMLContent = importedNode.firstElementChild;
     if ((_a = app.firstElementChild) === null || _a === void 0 ? void 0 : _a.hasChildNodes()) {
+        console.log("re render po cofnieciu");
         app.firstElementChild.remove();
-        return app.insertAdjacentElement("afterbegin", HTMLContent);
+        app.insertAdjacentElement("afterbegin", HTMLContent);
     }
     else {
-        return app.insertAdjacentElement("afterbegin", HTMLContent);
+        app.insertAdjacentElement("afterbegin", HTMLContent);
     }
 };
 const addCounterListeners = () => {
     const counters = document.querySelectorAll(".select-time-container");
+    console.log("listeners");
     counters.forEach(counter => {
         var _a, _b, _c, _d;
         (_b = (_a = counter.lastElementChild) === null || _a === void 0 ? void 0 : _a.firstElementChild) === null || _b === void 0 ? void 0 : _b.addEventListener("click", e => {
@@ -74,20 +76,26 @@ const setTimer = (mode, settings) => {
     const startBtn = document.querySelector(".start-btn");
     startBtn.addEventListener("click", () => {
         switch (mode) {
-            case "on_time":
+            case "ON_TIME":
                 renderContent(ontimeTimer);
                 onTimeOnly(settings.durationSecs, settings.durationMinutes);
                 break;
-            case "tabata":
+            case "TABATA":
                 renderContent(tabataTimer);
                 tabata(settings.durationSecs, settings.durationMinutes, settings.rest, settings.rounds);
                 break;
-            case "armrap":
+            case "ARMRAP":
                 renderContent(armrapTimer);
                 armrap(settings.durationSecs, settings.durationMinutes);
                 break;
         }
     });
+};
+const reRenderSettings = (mode, modeName) => {
+    renderContent(mode);
+    addCounterListeners();
+    setTimer(modeName, settings);
+    backToHome();
 };
 const reRenderUI = () => {
     renderContent(selectUI);
@@ -95,21 +103,21 @@ const reRenderUI = () => {
     const tabataBtn = document.querySelector(".tabata");
     const armrapBtn = document.querySelector(".armrap");
     onTimeBtn.addEventListener("click", () => {
-        const mode = "on_time";
+        const mode = "ON_TIME";
         renderContent(onTimeUI);
         backToHome();
         addCounterListeners();
         setTimer(mode, settings);
     });
     tabataBtn.addEventListener("click", () => {
-        const mode = "tabata";
+        const mode = "TABATA";
         renderContent(tabataUI);
         backToHome();
         addCounterListeners();
         setTimer(mode, settings);
     });
     armrapBtn.addEventListener("click", () => {
-        const mode = "armrap";
+        const mode = "ARMRAP";
         renderContent(armrapUI);
         backToHome();
         addCounterListeners();

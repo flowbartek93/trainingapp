@@ -21,6 +21,7 @@ body {
 
 #timer {
   font-size: 3rem;
+  padding: 2rem 0;
 }
 
 /* HOME */
@@ -151,6 +152,25 @@ body {
 }
 .back-btn:hover {
   filter: brightness(120%);
+}
+
+.back-menu > i {
+  font-size: 3rem !important;
+}
+
+.back-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  transition: 0.2s ease;
+}
+
+.back-menu:hover {
+  color: white;
+  background-color: black;
 }
 
 .armrap-counter-container {

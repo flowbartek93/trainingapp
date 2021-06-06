@@ -5,6 +5,7 @@ const timer = (option, settings, data) => {
     const secsContainer = document.getElementById("timer__secs");
     const minsContainer = document.getElementById("timer__mins");
     const resetBtn = document.querySelector(".reset-btn");
+    const backBtn = document.querySelector(".back-menu");
     let milsecs;
     let secs;
     let mins;
@@ -49,18 +50,26 @@ const timer = (option, settings, data) => {
         return timerID;
     };
     const resetTimer = () => {
+        milsecsContainer.textContent = "00";
+        secsContainer.textContent = "00";
+        minsContainer.textContent = "00";
+        milsecs = 0;
+        secs = 0;
+        mins = 0;
+    };
+    const resetManually = () => {
         if (isPaused) {
             resetBtn.disabled = false;
             resetBtn === null || resetBtn === void 0 ? void 0 : resetBtn.addEventListener("click", () => {
-                milsecsContainer.textContent = "00";
-                secsContainer.textContent = "00";
-                minsContainer.textContent = "00";
-                milsecs = 0;
-                secs = 0;
-                mins = 0;
-                console.log("resetuje");
+                resetTimer();
             });
         }
+    };
+    const backToSettings = (mode) => {
+        backBtn.addEventListener("click", () => {
+            resetTimer();
+            reRenderSettings(mode, timerModeName);
+        });
     };
     const startOnTimeMode = () => {
         let isTimeElapsed = false;
@@ -125,7 +134,7 @@ const timer = (option, settings, data) => {
                 stopBtn.classList.add("active");
                 stopBtn.textContent = "go !";
                 isPaused = true;
-                resetTimer();
+                resetManually();
                 if (id) {
                     clearInterval(id);
                 }
@@ -156,17 +165,20 @@ const timer = (option, settings, data) => {
     if (timerModeName === "ON_TIME") {
         startTimer(startOnTimeMode);
         stopTimer();
+        backToSettings(onTimeUI);
     }
     if (timerModeName === "TABATA") {
         //tu trzeba naprawić liczenie rund
         startTimer(startTabataMode);
         RoundCounter("tabata");
         stopTimer();
+        backToSettings(tabataUI);
     }
     if (timerModeName === "ARMRAP") {
         rounds = 0;
         startTimer(startArmrap);
         RoundCounter("armrap"); // nasłuchiwanie na button
         stopTimer();
+        backToSettings(armrapUI);
     }
 };

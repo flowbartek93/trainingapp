@@ -5,6 +5,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   const secsContainer = document.getElementById("timer__secs")! as HTMLSpanElement;
   const minsContainer = document.getElementById("timer__mins")! as HTMLSpanElement;
   const resetBtn = document.querySelector(".reset-btn")! as HTMLButtonElement;
+  const backBtn = document.querySelector(".back-menu")! as HTMLButtonElement;
 
   let milsecs: number;
   let secs: number;
@@ -58,20 +59,30 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   };
 
   const resetTimer = () => {
+    milsecsContainer.textContent = "00";
+    secsContainer.textContent = "00";
+    minsContainer.textContent = "00";
+
+    milsecs = 0;
+    secs = 0;
+    mins = 0;
+  };
+
+  const resetManually = () => {
     if (isPaused) {
       resetBtn.disabled = false;
+
       resetBtn?.addEventListener("click", () => {
-        milsecsContainer.textContent = "00";
-        secsContainer.textContent = "00";
-        minsContainer.textContent = "00";
-
-        milsecs = 0;
-        secs = 0;
-        mins = 0;
-
-        console.log("resetuje");
+        resetTimer();
       });
     }
+  };
+
+  const backToSettings = (mode: HTMLTemplateElement) => {
+    backBtn.addEventListener("click", () => {
+      resetTimer();
+      reRenderSettings(mode, timerModeName);
+    });
   };
 
   const startOnTimeMode = () => {
@@ -148,8 +159,8 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
         stopBtn.classList.add("active");
         stopBtn.textContent = "go !";
         isPaused = true;
-        resetTimer();
 
+        resetManually();
         if (id) {
           clearInterval(id);
         } else {
@@ -183,6 +194,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   if (timerModeName === "ON_TIME") {
     startTimer(startOnTimeMode);
     stopTimer();
+    backToSettings(onTimeUI);
   }
 
   if (timerModeName === "TABATA") {
@@ -191,6 +203,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     startTimer(startTabataMode);
     RoundCounter("tabata");
     stopTimer();
+    backToSettings(tabataUI);
   }
 
   if (timerModeName === "ARMRAP") {
@@ -198,5 +211,6 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     startTimer(startArmrap);
     RoundCounter("armrap"); // nasłuchiwanie na button
     stopTimer();
+    backToSettings(armrapUI);
   }
 };

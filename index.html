@@ -18,6 +18,8 @@
       </div>
     </template>
 
+    <!-- Settings templates -->
+
     <template class="on-time-template">
       <div class="main-container">
         <div class="timer-settings">
@@ -136,8 +138,12 @@
       </div>
     </template>
 
+    <!-- end of settings templates -->
+
+    <!-- Timer templates -->
     <template class="timer-armrap-template">
       <div class="main-container">
+        <button class="btn back-menu"><i class="fas fa-hand-point-left"></i>back</button>
         <div class="round-number-container">rounds completed: <span class="round-number">0</span></div>
 
         <div id="timer">
@@ -158,6 +164,7 @@
 
     <template class="timer-tabata-template">
       <div class="main-container">
+        <button class="btn back-menu"><i class="fas fa-hand-point-left"></i>back</button>
         <div class="round-number-container">
           Round number: <span class="round-number">0</span>
 
@@ -179,6 +186,7 @@
 
     <template class="timer-ontime-template">
       <div class="main-container">
+        <button class="btn back-menu"><i class="fas fa-hand-point-left"></i>back</button>
         <div id="timer">
           <span id="timer__mins">00</span>:<span id="timer__secs">00</span>:<span id="timer__milsecs">00</span>
         </div>
@@ -190,6 +198,7 @@
       </div>
     </template>
 
+    <!-- end of timer templates -->
     <div id="app"></div>
 
     <script src="dist/types.js"></script>
