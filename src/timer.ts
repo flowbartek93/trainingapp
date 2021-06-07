@@ -1,11 +1,15 @@
 const _ = undefined;
 
 const timer = (option: string, settings?: timerSettings, data?: timerData) => {
+  //Spans that views timer iterations
   const milsecsContainer = document.getElementById("timer__milsecs")! as HTMLSpanElement;
   const secsContainer = document.getElementById("timer__secs")! as HTMLSpanElement;
   const minsContainer = document.getElementById("timer__mins")! as HTMLSpanElement;
+
+  //Timer Buttons
   const resetBtn = document.querySelector(".reset-btn")! as HTMLButtonElement;
   const backBtn = document.querySelector(".back-menu")! as HTMLButtonElement;
+  const stopBtn = document.querySelector(".stop-btn")! as HTMLButtonElement;
 
   let milsecs: number;
   let secs: number;
@@ -58,33 +62,6 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     return timerID;
   };
 
-  const resetTimer = () => {
-    milsecsContainer.textContent = "00";
-    secsContainer.textContent = "00";
-    minsContainer.textContent = "00";
-
-    milsecs = 0;
-    secs = 0;
-    mins = 0;
-  };
-
-  const resetManually = () => {
-    if (isPaused) {
-      resetBtn.disabled = false;
-
-      resetBtn?.addEventListener("click", () => {
-        resetTimer();
-      });
-    }
-  };
-
-  const backToSettings = (mode: HTMLTemplateElement) => {
-    backBtn.addEventListener("click", () => {
-      resetTimer();
-      reRenderSettings(mode, timerModeName);
-    });
-  };
-
   const startOnTimeMode = () => {
     let isTimeElapsed: boolean = false;
 
@@ -107,7 +84,7 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
       if (secs === settings?.rest) {
         isTimeElapsed = true;
         resetTimer();
-        RoundCounter("tabata"); // automatyczne zliczenie rundy
+        RoundCounter(); // automatyczne zliczenie rundy
         startTimer(startTabataMode);
         title.style.display = "none";
       }
@@ -142,47 +119,80 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
     return { isTimeElapsed };
   };
 
-  const stopTimer = () => {
-    const stopBtn = document.querySelector(".stop-btn");
-    let id: NodeJS.Timeout;
+  //EVENTS TAKING PLACE WHEN TIMER IS RUNNING
 
-    stopBtn?.addEventListener("click", () => {
-      if (stopBtn.classList.contains("active")) {
-        //continue timing
-        stopBtn.classList.remove("active");
-        stopBtn.textContent = "stop !";
-        isPaused = false;
-        resetBtn.disabled = true;
-        id = startTimer(startArmrap);
-      } else {
-        //pauza
-        stopBtn.classList.add("active");
-        stopBtn.textContent = "go !";
-        isPaused = true;
+  const eventListeners = (UIPart: HTMLTemplateElement, mode: () => {}) => {
+    //Reset Buttons
 
-        resetManually();
-        if (id) {
-          clearInterval(id);
-        } else {
-          clearInterval(timerID);
-        }
-      }
+    resetBtn?.addEventListener("click", () => {
+      resetTimer();
     });
+
+    //back to settings of particular timer
+    backBtn.addEventListener("click", () => {
+      backToSettings(UIPart);
+    });
+
+    //stop timer btn
+    stopBtn?.addEventListener("click", () => {
+      stopTimer(mode);
+    });
+
+    //count rounds when in armrap mode
+    if (UIPart === armrapUI) {
+      const countBtn = document.querySelector(".count-armrap-round")! as HTMLButtonElement;
+
+      countBtn.addEventListener("click", () => {
+        RoundCounter();
+      });
+    }
   };
 
-  const RoundCounter = (mode: string) => {
+  //FUNTIONS THAT ARE IN CONTROL OF TIMER
+
+  const resetTimer = () => {
+    milsecsContainer.textContent = "00";
+    secsContainer.textContent = "00";
+    minsContainer.textContent = "00";
+
+    milsecs = 0;
+    secs = 0;
+    mins = 0;
+  };
+
+  const backToSettings = (mode: HTMLTemplateElement) => {
+    resetTimer();
+    reRenderSettings(mode, timerModeName);
+  };
+
+  const stopTimer = (mode: () => {}) => {
+    if (stopBtn.classList.contains("active")) {
+      //continue timing
+      stopBtn.classList.remove("active");
+      stopBtn.textContent = "stop !";
+      isPaused = false;
+      resetBtn.disabled = true;
+      startTimer(mode);
+    } else {
+      //pauza
+      stopBtn.classList.add("active");
+      stopBtn.textContent = "go !";
+      isPaused = true;
+      resetBtn.disabled = false;
+      clearInterval(timerID);
+    }
+  };
+
+  const RoundCounter = () => {
     const roundNumberSpan = document.querySelector(".round-number")! as HTMLSpanElement;
     const roundNumberTotal = document.querySelector(".round-number-total")! as HTMLSpanElement;
 
-    if (mode === "armrap") {
-      const countBtn = document.querySelector(".count-armrap-round")! as HTMLButtonElement;
-      return countBtn.addEventListener("click", () => {
-        rounds!++;
-        roundNumberSpan.textContent = rounds!.toString();
-      });
+    if (timerModeName === "ARMRAP") {
+      rounds!++;
+      roundNumberSpan.textContent = rounds!.toString();
     }
 
-    if (mode === "tabata") {
+    if (timerModeName === "TABATA") {
       if (rounds === settings?.rounds) {
         roundNumberSpan.style.color = "brown";
       }
@@ -193,24 +203,20 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
 
   if (timerModeName === "ON_TIME") {
     startTimer(startOnTimeMode);
-    stopTimer();
-    backToSettings(onTimeUI);
+    eventListeners(onTimeUI, startOnTimeMode);
   }
 
   if (timerModeName === "TABATA") {
     //tu trzeba naprawić liczenie rund
 
     startTimer(startTabataMode);
-    RoundCounter("tabata");
-    stopTimer();
-    backToSettings(tabataUI);
+    RoundCounter();
+    eventListeners(tabataUI, startTabataMode);
   }
 
   if (timerModeName === "ARMRAP") {
     rounds = 0;
     startTimer(startArmrap);
-    RoundCounter("armrap"); // nasłuchiwanie na button
-    stopTimer();
-    backToSettings(armrapUI);
+    eventListeners(armrapUI, startArmrap);
   }
 };
