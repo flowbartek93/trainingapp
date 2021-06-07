@@ -16,6 +16,13 @@ const ontimeTimer = document.querySelector(".timer-ontime-template") as HTMLTemp
 //render container
 const app = document.getElementById("app")!;
 
+const settings: timerSettings = {
+  durationSecs: 0,
+  durationMinutes: 0,
+  rounds: 0,
+  rest: 0
+};
+
 const renderContent = (el: HTMLTemplateElement) => {
   const importedNode = document.importNode(el.content, true);
   const HTMLContent = importedNode.firstElementChild as HTMLElement;
@@ -78,6 +85,7 @@ const countSettings = (e: Event, operation: string) => {
   if (container.classList.contains("rounds")) {
     settings.rounds = currentValue;
   }
+
   console.log(settings);
 };
 

@@ -11,6 +11,12 @@ const tabataTimer = document.querySelector(".timer-tabata-template");
 const ontimeTimer = document.querySelector(".timer-ontime-template");
 //render container
 const app = document.getElementById("app");
+const settings = {
+    durationSecs: 0,
+    durationMinutes: 0,
+    rounds: 0,
+    rest: 0
+};
 const renderContent = (el) => {
     var _a;
     const importedNode = document.importNode(el.content, true);

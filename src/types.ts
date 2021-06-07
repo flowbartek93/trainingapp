@@ -16,5 +16,3 @@ type timerSettings = {
   rounds?: number;
   rest?: number;
 };
-
-const settings: timerSettings = {};

@@ -3,4 +3,3 @@
 let isCounting = null;
 let timerID;
 let isPaused;
-const settings = {};
