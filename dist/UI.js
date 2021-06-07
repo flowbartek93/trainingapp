@@ -37,15 +37,17 @@ const addCounterListeners = () => {
         var _a, _b, _c, _d;
         (_b = (_a = counter.lastElementChild) === null || _a === void 0 ? void 0 : _a.firstElementChild) === null || _b === void 0 ? void 0 : _b.addEventListener("click", e => {
             //MINUS
-            countSettings(e, "minus");
+            const newSettings = setTimerSettings(e, "minus");
+            console.log(newSettings);
         });
         (_d = (_c = counter.lastElementChild) === null || _c === void 0 ? void 0 : _c.lastElementChild) === null || _d === void 0 ? void 0 : _d.addEventListener("click", e => {
             //PLUS
-            countSettings(e, "plus");
+            const newSettings = setTimerSettings(e, "plus");
+            console.log(newSettings);
         });
     });
 };
-const countSettings = (e, operation) => {
+const setTimerSettings = (e, operation) => {
     var _a, _b;
     const clickedEl = e.target;
     let currentValue = parseInt((_a = clickedEl.parentElement.parentElement) === null || _a === void 0 ? void 0 : _a.children[1].textContent); // kontener gdzie ustawia się pożądany czas
@@ -58,19 +60,25 @@ const countSettings = (e, operation) => {
         currentValue--;
     }
     container.textContent = currentValue.toString();
-    if (container.classList.contains("seconds")) {
-        settings.durationSecs = currentValue;
-    }
-    if (container.classList.contains("minutes")) {
-        settings.durationMinutes = currentValue;
-    }
-    if (container.classList.contains("rest")) {
-        settings.rest = currentValue;
-    }
-    if (container.classList.contains("rounds")) {
-        settings.rounds = currentValue;
-    }
-    console.log(settings);
+    return (function setSettings() {
+        let seconds = 0;
+        let minutes = 0;
+        let rest = 0;
+        let rounds = 0;
+        if (container.classList.contains("seconds")) {
+            seconds = currentValue;
+        }
+        if (container.classList.contains("minutes")) {
+            minutes = currentValue;
+        }
+        if (container.classList.contains("rest")) {
+            rest = currentValue;
+        }
+        if (container.classList.contains("rounds")) {
+            rounds = currentValue;
+        }
+        return Object.assign(Object.assign({}, settings), { durationSecs: seconds, durationMinutes: minutes, rounds: rounds, rest: rest });
+    })();
 };
 const backToHome = () => {
     const backBtn = document.querySelector(".back-btn");

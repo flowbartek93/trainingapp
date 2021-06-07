@@ -45,17 +45,18 @@ const addCounterListeners = () => {
     counter.lastElementChild?.firstElementChild?.addEventListener("click", e => {
       //MINUS
 
-      countSettings(e, "minus");
+      setTimerSettings(e, "minus");
     });
+
     counter.lastElementChild?.lastElementChild?.addEventListener("click", e => {
       //PLUS
 
-      countSettings(e, "plus");
+      setTimerSettings(e, "plus");
     });
   });
 };
 
-const countSettings = (e: Event, operation: string) => {
+const setTimerSettings = (e: Event, operation: string) => {
   const clickedEl = e.target as HTMLElement;
   let currentValue: number = parseInt(clickedEl.parentElement!.parentElement?.children[1].textContent!); // kontener gdzie ustawia się pożądany czas
   const container = clickedEl.parentElement!.parentElement?.children[1]!;
@@ -85,8 +86,6 @@ const countSettings = (e: Event, operation: string) => {
   if (container.classList.contains("rounds")) {
     settings.rounds = currentValue;
   }
-
-  console.log(settings);
 };
 
 const backToHome = () => {
@@ -136,6 +135,7 @@ const reRenderUI = () => {
     const mode = "ON_TIME";
 
     renderContent(onTimeUI);
+
     backToHome();
     addCounterListeners();
 
