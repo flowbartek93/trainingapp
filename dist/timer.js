@@ -13,7 +13,6 @@ const timer = (option, settings, data) => {
     let secs;
     let mins;
     let rounds = 1;
-    let isPaused = false;
     const timerModeName = option;
     if (data) {
         milsecs = data.milsecs;

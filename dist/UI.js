@@ -71,22 +71,38 @@ const backToHome = () => {
         reRenderUI();
     });
 };
+const checkSettings = () => {
+    //check if settings are empty
+    let isProper = true;
+    console.log("checking");
+    if (Object.keys(settings).length === 0) {
+        alert("Please set your timer before start");
+        isProper = false;
+    }
+    console.log(isProper);
+    return isProper;
+};
 const setTimer = (mode, settings) => {
     const startBtn = document.querySelector(".start-btn");
     startBtn.addEventListener("click", () => {
-        switch (mode) {
-            case "ON_TIME":
-                renderContent(ontimeTimer);
-                onTimeOnly(settings.durationSecs, settings.durationMinutes);
-                break;
-            case "TABATA":
-                renderContent(tabataTimer);
-                tabata(settings.durationSecs, settings.durationMinutes, settings.rest, settings.rounds);
-                break;
-            case "ARMRAP":
-                renderContent(armrapTimer);
-                armrap(settings.durationSecs, settings.durationMinutes);
-                break;
+        if (checkSettings() === true) {
+            switch (mode) {
+                case "ON_TIME":
+                    renderContent(ontimeTimer);
+                    onTimeOnly(settings.durationSecs, settings.durationMinutes);
+                    break;
+                case "TABATA":
+                    renderContent(tabataTimer);
+                    tabata(settings.durationSecs, settings.durationMinutes, settings.rest, settings.rounds);
+                    break;
+                case "ARMRAP":
+                    renderContent(armrapTimer);
+                    armrap(settings.durationSecs, settings.durationMinutes);
+                    break;
+            }
+        }
+        else {
+            return;
         }
     });
 };

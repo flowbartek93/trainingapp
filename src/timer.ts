@@ -1,6 +1,6 @@
 const _ = undefined;
 
-const timer = (option: string, settings?: timerSettings, data?: timerData) => {
+const timer = (option: string, settings: timerSettings, data?: timerData) => {
   //Spans that views timer iterations
   const milsecsContainer = document.getElementById("timer__milsecs")! as HTMLSpanElement;
   const secsContainer = document.getElementById("timer__secs")! as HTMLSpanElement;
@@ -16,7 +16,6 @@ const timer = (option: string, settings?: timerSettings, data?: timerData) => {
   let mins: number;
 
   let rounds: number | undefined = 1;
-  let isPaused: boolean = false;
 
   const timerModeName: string = option;
 
