@@ -11,12 +11,7 @@ const tabataTimer = document.querySelector(".timer-tabata-template");
 const ontimeTimer = document.querySelector(".timer-ontime-template");
 //render container
 const app = document.getElementById("app");
-const settings = {
-    durationSecs: 0,
-    durationMinutes: 0,
-    rounds: 0,
-    rest: 0
-};
+const settings = {};
 const renderContent = (el) => {
     var _a;
     const importedNode = document.importNode(el.content, true);
@@ -32,18 +27,15 @@ const renderContent = (el) => {
 };
 const addCounterListeners = () => {
     const counters = document.querySelectorAll(".select-time-container");
-    console.log("listeners");
     counters.forEach(counter => {
         var _a, _b, _c, _d;
         (_b = (_a = counter.lastElementChild) === null || _a === void 0 ? void 0 : _a.firstElementChild) === null || _b === void 0 ? void 0 : _b.addEventListener("click", e => {
             //MINUS
-            const newSettings = setTimerSettings(e, "minus");
-            console.log(newSettings);
+            setTimerSettings(e, "minus");
         });
         (_d = (_c = counter.lastElementChild) === null || _c === void 0 ? void 0 : _c.lastElementChild) === null || _d === void 0 ? void 0 : _d.addEventListener("click", e => {
             //PLUS
-            const newSettings = setTimerSettings(e, "plus");
-            console.log(newSettings);
+            setTimerSettings(e, "plus");
         });
     });
 };
@@ -52,33 +44,26 @@ const setTimerSettings = (e, operation) => {
     const clickedEl = e.target;
     let currentValue = parseInt((_a = clickedEl.parentElement.parentElement) === null || _a === void 0 ? void 0 : _a.children[1].textContent); // kontener gdzie ustawia się pożądany czas
     const container = (_b = clickedEl.parentElement.parentElement) === null || _b === void 0 ? void 0 : _b.children[1];
-    currentValue <= 0 && (currentValue = 0);
     if (operation === "plus") {
         currentValue++;
     }
     else if (operation === "minus") {
         currentValue--;
+        currentValue <= 0 && (currentValue = 0);
     }
     container.textContent = currentValue.toString();
-    return (function setSettings() {
-        let seconds = 0;
-        let minutes = 0;
-        let rest = 0;
-        let rounds = 0;
-        if (container.classList.contains("seconds")) {
-            seconds = currentValue;
-        }
-        if (container.classList.contains("minutes")) {
-            minutes = currentValue;
-        }
-        if (container.classList.contains("rest")) {
-            rest = currentValue;
-        }
-        if (container.classList.contains("rounds")) {
-            rounds = currentValue;
-        }
-        return Object.assign(Object.assign({}, settings), { durationSecs: seconds, durationMinutes: minutes, rounds: rounds, rest: rest });
-    })();
+    if (container.classList.contains("seconds")) {
+        settings.durationSecs = currentValue;
+    }
+    if (container.classList.contains("minutes")) {
+        settings.durationMinutes = currentValue;
+    }
+    if (container.classList.contains("rest")) {
+        settings.rest = currentValue;
+    }
+    if (container.classList.contains("rounds")) {
+        settings.rounds = currentValue;
+    }
 };
 const backToHome = () => {
     const backBtn = document.querySelector(".back-btn");

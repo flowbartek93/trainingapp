@@ -16,12 +16,7 @@ const ontimeTimer = document.querySelector(".timer-ontime-template") as HTMLTemp
 //render container
 const app = document.getElementById("app")!;
 
-const settings: timerSettings = {
-  durationSecs: 0,
-  durationMinutes: 0,
-  rounds: 0,
-  rest: 0
-};
+const settings: timerSettings = {};
 
 const renderContent = (el: HTMLTemplateElement) => {
   const importedNode = document.importNode(el.content, true);
@@ -38,8 +33,6 @@ const renderContent = (el: HTMLTemplateElement) => {
 
 const addCounterListeners = () => {
   const counters = document.querySelectorAll(".select-time-container");
-
-  console.log("listeners");
 
   counters.forEach(counter => {
     counter.lastElementChild?.firstElementChild?.addEventListener("click", e => {
@@ -61,12 +54,11 @@ const setTimerSettings = (e: Event, operation: string) => {
   let currentValue: number = parseInt(clickedEl.parentElement!.parentElement?.children[1].textContent!); // kontener gdzie ustawia się pożądany czas
   const container = clickedEl.parentElement!.parentElement?.children[1]!;
 
-  currentValue <= 0 && (currentValue = 0);
-
   if (operation === "plus") {
     currentValue++;
   } else if (operation === "minus") {
     currentValue--;
+    currentValue <= 0 && (currentValue = 0);
   }
 
   container.textContent = currentValue.toString();

@@ -216,11 +216,8 @@ body {
 }
 
 .rest-time {
-  position: absolute;
-  top: 80%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   text-align: center;
+  padding: 2rem 0;
   font-size: 2.6rem;
   color: lightskyblue;
   text-transform: uppercase;
